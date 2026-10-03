@@ -27,15 +27,15 @@ export default function AboutMe() {
         <AnimateOnScroll animation="fade-up">
           <div className="grid grid-cols-1 gap-10 md:grid-cols-[230px_1fr] md:gap-14">
             <div className="flex flex-col">
-              <div className="relative w-full max-w-[280px] flex-1 overflow-hidden rounded-lg md:max-w-none">
-                <Image src="/photo.png" alt="Faqih Nur Fahmi, HR Manager and Full Stack Developer" width={400} height={400} className="h-full w-full object-cover" />
+              <div className="relative mx-auto w-full max-w-[400px] flex-1 overflow-hidden rounded-lg md:mx-0 md:max-w-none">
+                <Image src="/photo-profil.jpeg" alt="Faqih Nur Fahmi, HR Manager and Full Stack Developer" width={400} height={400} className="h-full w-full object-cover" />
               </div>
             </div>
 
             <div className="flex flex-col">
               <p className="leading-relaxed text-[var(--ed-text-secondary)]">{t("about.content")}</p>
-              <div className="mt-6 flex flex-1 items-end">
-                  <a href="https://faqih.id/blog/profil-faqih-nur-fahmi" target="_blank" rel="noopener noreferrer">
+              <div className="mt-6 flex flex-1 items-end justify-center md:justify-start">
+                <a href="https://faqih.id/blog/profil-faqih-nur-fahmi" target="_blank" rel="noopener noreferrer">
                   <EditorialButton variant="primary">{t("about.read-more")}</EditorialButton>
                 </a>
               </div>
