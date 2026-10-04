@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { BlogPost } from "@/services/notionServices";
 import { useTranslation } from "react-i18next";
@@ -18,9 +19,37 @@ const INITIAL_COUNT = 5;
 export default function BlogListClient({ posts }: BlogListClientProps) {
   const [selectedTag, setSelectedTag] = useState("All");
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
+  const tagScrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
-  const allTags = ["All", ...Array.from(new Set(posts.flatMap((post) => post.tags))).sort()];
+  const tagCounts = new Map<string, number>([["All", posts.length]]);
+  posts.flatMap((post) => post.tags).forEach((tag) => tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1));
+  const allTags = ["All", ...Array.from(tagCounts.keys()).filter((tag) => tag !== "All").sort()];
   const filteredPosts = selectedTag === "All" ? posts : posts.filter((post) => post.tags.includes(selectedTag));
+
+  // Tampilkan panah kiri/kanan hanya jika masih ada tag tersembunyi di arah itu
+  const updateScrollArrows = () => {
+    const el = tagScrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 4);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+  };
+
+  useEffect(() => {
+    const el = tagScrollRef.current;
+    if (!el) return;
+    updateScrollArrows();
+    const observer = new ResizeObserver(updateScrollArrows);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [allTags.length]);
+
+  const scrollTags = (direction: -1 | 1) => {
+    const el = tagScrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: direction * el.clientWidth * 0.6, behavior: "smooth" });
+  };
 
   const handleLoadMore = () => {
     setVisibleCount((prev) => Math.min(prev + INITIAL_COUNT, filteredPosts.length));
@@ -33,22 +62,50 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
       <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-28 md:px-10 md:pb-28 md:pt-36">
         <SectionHeader tag="Blog" title={t("blog.title")} description={t("blog.description")} />
 
-        {/* Filter tag — teks minimal, bukan pill */}
+        {/* Filter tag — section bar ala koran: hairline atas-bawah, 1 baris, scroll horizontal di mobile */}
         {allTags.length > 1 && (
-          <div className="flex flex-wrap gap-x-6 gap-y-2 pb-4">
-            {allTags.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => {
-                  setSelectedTag(tag);
-                  setVisibleCount(INITIAL_COUNT);
-                }}
-                className={`cursor-pointer text-[11px] uppercase tracking-[0.18em] transition-colors ${selectedTag === tag ? "text-[var(--ed-accent)]" : "text-[var(--ed-text-muted)] hover:text-[var(--ed-text-secondary)]"}`}
-              >
-                {tag}
-              </button>
-            ))}
-          </div>
+          <nav aria-label="Filter tag" className="relative mb-8 border-y border-[var(--ed-border)]">
+            {/* Panah carousel — hanya mobile, karena di desktop tag di-wrap */}
+            <button
+              type="button"
+              aria-label="Geser tag ke kiri"
+              onClick={() => scrollTags(-1)}
+              className={`absolute inset-y-0 left-0 z-10 flex w-12 cursor-pointer items-center justify-start bg-gradient-to-r from-[var(--ed-bg)] from-50% to-transparent text-[var(--ed-text-secondary)] transition-opacity duration-200 hover:text-[var(--ed-accent)] md:hidden ${canScrollLeft ? "opacity-100" : "pointer-events-none opacity-0"}`}
+            >
+              <ChevronLeft size={16} strokeWidth={1.5} />
+            </button>
+            <button
+              type="button"
+              aria-label="Geser tag ke kanan"
+              onClick={() => scrollTags(1)}
+              className={`absolute inset-y-0 right-0 z-10 flex w-12 cursor-pointer items-center justify-end bg-gradient-to-l from-[var(--ed-bg)] from-50% to-transparent text-[var(--ed-text-secondary)] transition-opacity duration-200 hover:text-[var(--ed-accent)] md:hidden ${canScrollRight ? "opacity-100" : "pointer-events-none opacity-0"}`}
+            >
+              <ChevronRight size={16} strokeWidth={1.5} />
+            </button>
+
+            <div ref={tagScrollRef} onScroll={updateScrollArrows} className="ed-scroll-x flex gap-x-7 md:flex-wrap">
+              {allTags.map((tag) => {
+                const isActive = selectedTag === tag;
+                return (
+                  <button
+                    key={tag}
+                    type="button"
+                    aria-pressed={isActive}
+                    onClick={(e) => {
+                      setSelectedTag(tag);
+                      setVisibleCount(INITIAL_COUNT);
+                      e.currentTarget.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+                    }}
+                    className={`relative flex-shrink-0 cursor-pointer whitespace-nowrap py-3.5 text-[11px] uppercase tracking-[0.18em] transition-colors ${isActive ? "text-[var(--ed-accent)]" : "text-[var(--ed-text-muted)] hover:text-[var(--ed-text-secondary)]"}`}
+                  >
+                    {tag}
+                    <sup className="ml-1 text-[9px] tracking-normal tabular-nums">{tagCounts.get(tag)}</sup>
+                    {isActive && <motion.span layoutId="blog-tag-underline" className="absolute inset-x-0 bottom-0 h-px bg-[var(--ed-accent)]" transition={{ duration: 0.3, ease: "easeOut" }} />}
+                  </button>
+                );
+              })}
+            </div>
+          </nav>
         )}
 
         {/* Daftar artikel — dengan thumbnail seperti sebelumnya */}

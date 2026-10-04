@@ -79,6 +79,17 @@
   text-decoration-color: var(--ed-accent);
 }
 
+/* Scroll horizontal tanpa scrollbar — dipakai filter tag blog */
+.ed-scroll-x {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ed-scroll-x::-webkit-scrollbar {
+  display: none;
+}
+
 .editorial ::selection {
   background: var(--ed-accent);
   color: var(--ed-bg);

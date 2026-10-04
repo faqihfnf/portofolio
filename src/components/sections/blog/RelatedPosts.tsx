@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { BlogPost } from "@/services/notionServices";
 
 interface RelatedPostsProps {
@@ -20,12 +23,13 @@ function pickRelated(current: BlogPost, posts: BlogPost[], limit: number) {
 }
 
 export default function RelatedPosts({ current, posts, limit = 3 }: RelatedPostsProps) {
+  const { t } = useTranslation();
   const related = pickRelated(current, posts, limit);
   if (related.length === 0) return null;
 
   return (
     <section className="mt-20 border-t border-[var(--ed-border)] pt-10">
-      <h2 className="text-[11px] uppercase tracking-[0.18em] text-[var(--ed-text-muted)]">Related Posts</h2>
+      <h2 className="text-[14px] uppercase tracking-[0.18em] text-[var(--ed-text-muted)]">{t("blog.related")}</h2>
 
       <ul className="mt-8 grid gap-10 sm:grid-cols-1 lg:grid-cols-3">
         {related.map((post) => (

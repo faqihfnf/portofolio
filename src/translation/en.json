@@ -147,7 +147,8 @@
 
   "blog": {
     "title": "My Blog",
-    "description": "A collection of my thoughts, tutorials, and experiences."
+    "description": "A collection of my thoughts, tutorials, and experiences.",
+    "related": "Other Writings"
   },
 
   "contact": {

@@ -146,7 +146,8 @@
 
   "blog": {
     "title": "Blog Saya",
-    "description": "Kumpulan pemikiran, tutorial, dan pengalaman saya."
+    "description": "Kumpulan pemikiran, tutorial, dan pengalaman saya.",
+    "related": "Tulisan Lainnya"
   },
 
   "contact": {
