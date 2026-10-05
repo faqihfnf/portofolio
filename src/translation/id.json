@@ -141,7 +141,8 @@
   "certificates": {
     "title": "Sertifikat Saya",
     "description": "Kumpulan pencapaian dan kursus yang telah saya selesaikan.",
-    "view": "Lihat Sertifikat"
+    "view": "Lihat Sertifikat",
+    "open-pdf": "Buka PDF"
   },
 
   "blog": {

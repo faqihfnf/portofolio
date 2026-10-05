@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { certificates } from "@/data/certificates";
+import { certificates, type CertificateItem } from "@/data/certificates";
 import { useTranslation } from "react-i18next";
 import SectionHeader from "@/components/editorial/SectionHeader";
 import { fraunces, inter } from "@/components/editorial/fonts";
@@ -12,10 +12,16 @@ const INITIAL_COUNT = 5;
 
 export default function CertificatesClient() {
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
-  const [selectedLink, setSelectedLink] = useState<string | null>(null);
+  const [selectedCert, setSelectedCert] = useState<CertificateItem | null>(null);
+  // Chrome Android & sebagian browser mobile tidak bisa render PDF di <iframe>
+  const [canEmbedPdf, setCanEmbedPdf] = useState(true);
+
+  useEffect(() => {
+    setCanEmbedPdf(navigator.pdfViewerEnabled === true);
+  }, []);
 
   const handleLoadMore = () => setVisibleCount((prev) => prev + INITIAL_COUNT);
-  const handleCloseModal = () => setSelectedLink(null);
+  const handleCloseModal = () => setSelectedCert(null);
 
   const { t } = useTranslation();
 
@@ -36,20 +42,20 @@ export default function CertificatesClient() {
               transition={{ duration: 0.5, delay: (index % 8) * 0.08 }}
             >
               <button
-                onClick={() => setSelectedLink(cert.link)}
+                onClick={() => setSelectedCert(cert)}
                 className="ed-serif cursor-pointer self-start text-2xl italic text-[var(--ed-text-muted)] transition-colors hover:text-[var(--ed-accent)]"
                 aria-label={`${t("certificates.view")} ${cert.title}`}
               >
                 {String(index + 1).padStart(2, "0")}
               </button>
 
-              <button onClick={() => setSelectedLink(cert.link)} className="cursor-pointer text-left">
+              <button onClick={() => setSelectedCert(cert)} className="cursor-pointer text-left">
                 <h3 className="ed-serif text-lg tracking-tight md:text-xl">{cert.title}</h3>
                 <p className="mt-1 text-[12px] uppercase tracking-[0.14em] text-[var(--ed-text-muted)]">{cert.organization}</p>
                 <span
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSelectedLink(cert.link);
+                    setSelectedCert(cert);
                   }}
                   className="ed-link mt-3 inline-block text-[11px] uppercase tracking-[0.18em] text-[var(--ed-accent)]"
                 >
@@ -74,7 +80,7 @@ export default function CertificatesClient() {
 
       {/* Modal Preview */}
       <AnimatePresence>
-        {selectedLink && (
+        {selectedCert && (
           <motion.div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={handleCloseModal}>
             <motion.div
               className="relative max-h-[90vh] w-full max-w-4xl overflow-auto rounded-lg border border-[var(--ed-border)] bg-[var(--ed-bg)] p-4"
@@ -87,7 +93,19 @@ export default function CertificatesClient() {
                 &times;
               </button>
 
-              {selectedLink.toLowerCase().endsWith(".pdf") ? <iframe src={selectedLink} className="h-[70vh] w-full rounded-md" /> : <img src={selectedLink} alt="Certificate" className="h-auto w-full rounded-md" />}
+              {selectedCert.link.toLowerCase().endsWith(".pdf") && canEmbedPdf ? (
+                <iframe src={selectedCert.link} title={selectedCert.title} className="h-[70vh] w-full rounded-md" />
+              ) : (
+                <img src={selectedCert.image} alt={selectedCert.title} className="h-auto w-full rounded-md" />
+              )}
+
+              {selectedCert.link.toLowerCase().endsWith(".pdf") && !canEmbedPdf && (
+                <div className="mt-4 text-center">
+                  <a href={selectedCert.link} target="_blank" rel="noopener noreferrer" className="ed-link text-[11px] uppercase tracking-[0.18em] text-[var(--ed-accent)]">
+                    {t("certificates.open-pdf")}
+                  </a>
+                </div>
+              )}
             </motion.div>
           </motion.div>
         )}

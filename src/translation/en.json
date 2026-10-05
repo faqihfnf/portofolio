@@ -142,7 +142,8 @@
   "certificates": {
     "title": "My Certificates",
     "description": "A collection of achievements and courses I have completed.",
-    "view": "View Certificate"
+    "view": "View Certificate",
+    "open-pdf": "Open PDF"
   },
 
   "blog": {
