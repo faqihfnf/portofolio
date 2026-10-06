@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import { certificates, type CertificateItem } from "@/data/certificates";
 import { useTranslation } from "react-i18next";
@@ -8,17 +9,14 @@ import SectionHeader from "@/components/editorial/SectionHeader";
 import { fraunces, inter } from "@/components/editorial/fonts";
 import { EditorialButton } from "@/components/editorial/EditorialButton";
 
+// react-pdf butuh API browser, jadi skip SSR
+const PdfViewer = dynamic(() => import("./PdfViewer"), { ssr: false });
+
 const INITIAL_COUNT = 5;
 
 export default function CertificatesClient() {
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
   const [selectedCert, setSelectedCert] = useState<CertificateItem | null>(null);
-  // Chrome Android & sebagian browser mobile tidak bisa render PDF di <iframe>
-  const [canEmbedPdf, setCanEmbedPdf] = useState(true);
-
-  useEffect(() => {
-    setCanEmbedPdf(navigator.pdfViewerEnabled === true);
-  }, []);
 
   const handleLoadMore = () => setVisibleCount((prev) => prev + INITIAL_COUNT);
   const handleCloseModal = () => setSelectedCert(null);
@@ -83,7 +81,7 @@ export default function CertificatesClient() {
         {selectedCert && (
           <motion.div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={handleCloseModal}>
             <motion.div
-              className="relative max-h-[90vh] w-full max-w-4xl overflow-auto rounded-lg border border-[var(--ed-border)] bg-[var(--ed-bg)] p-4"
+              className="relative max-h-[90vh] w-full max-w-4xl overflow-auto rounded-lg border border-[var(--ed-border)] bg-[var(--ed-bg)] p-4 pt-10"
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
@@ -93,18 +91,17 @@ export default function CertificatesClient() {
                 &times;
               </button>
 
-              {selectedCert.link.toLowerCase().endsWith(".pdf") && canEmbedPdf ? (
-                <iframe src={selectedCert.link} title={selectedCert.title} className="h-[70vh] w-full rounded-md" />
+              {selectedCert.link.toLowerCase().endsWith(".pdf") ? (
+                <>
+                  <PdfViewer file={selectedCert.link} />
+                  <div className="mt-4 text-center">
+                    <a href={selectedCert.link} target="_blank" rel="noopener noreferrer" className="ed-link text-[11px] uppercase tracking-[0.18em] text-[var(--ed-accent)]">
+                      {t("certificates.open-pdf")}
+                    </a>
+                  </div>
+                </>
               ) : (
-                <img src={selectedCert.image} alt={selectedCert.title} className="h-auto w-full rounded-md" />
-              )}
-
-              {selectedCert.link.toLowerCase().endsWith(".pdf") && !canEmbedPdf && (
-                <div className="mt-4 text-center">
-                  <a href={selectedCert.link} target="_blank" rel="noopener noreferrer" className="ed-link text-[11px] uppercase tracking-[0.18em] text-[var(--ed-accent)]">
-                    {t("certificates.open-pdf")}
-                  </a>
-                </div>
+                <img src={selectedCert.link} alt={selectedCert.title} className="h-auto w-full rounded-md" />
               )}
             </motion.div>
           </motion.div>

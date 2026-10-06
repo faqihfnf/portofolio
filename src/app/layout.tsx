@@ -61,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     jobTitle: "HR Manager",
     description: "HR Manager and BNSP Certified HR Manager with full-stack development skills.",
     url: "https://faqih.id",
-    image: "https://faqih.id/photo.png",
+    image: "https://faqih.id/profil.png",
     sameAs: ["https://github.com/faqihfnf", "https://www.linkedin.com/in/faqih-nur-fahmi-b51bb1ab/", "https://www.instagram.com/faqih.me", "https://www.youtube.com/@marifahid"],
     knowsAbout: ["Human Resource Management", "People Management", "Organizational Development", "Digital Transformation", "Full Stack Development"],
     hasCredential: {
