@@ -20,6 +20,7 @@
     "title-second-emphasis": "sistem",
     "title-ending": ".",
     "description": "Saya adalah HR Manager dengan pengalaman lebih dari 9 tahun dalam membantu organisasi mengembangkan SDM, proses kerja, dan sistem di tempat kerja. Sebagai HR Manager bersertifikasi BNSP dengan kemampuan full-stack development, saya menghubungkan kebutuhan organisasi dengan solusi digital yang praktis.",
+    "based": "Domisili di",
     "stats": {
       "years": "Tahun di HR",
       "projects": "Proyek Digital",
@@ -97,7 +98,7 @@
   },
   "testimonials": {
     "tag": "Testimoni",
-    "title": "Apa Kata",
+    "title": "Apa Kata ",
     "title-1": "Mereka?",
     "description": "Testimoni dari mereka yang pernah bekerja sama dengan saya.",
     "cta-text": "Kenal saya atau pernah bekerja sama dengan saya? Tulisan Anda sangat berarti — silakan berbagi pengalaman Anda di sini.",
@@ -107,8 +108,9 @@
     "go-to": "Buka testimoni {{number}}"
   },
   "cta": {
-    "title": "Ceritakan",
-    "title-emphasis": "Tantangan Anda",
+    "title": "Karya yang baik selalu diawali dengan",
+    "title-emphasis": "percakapan",
+    "title-ending": ".",
     "description": "Baik Anda sedang membangun fungsi SDM yang lebih kuat, meningkatkan proses organisasi, maupun mengeksplorasi solusi teknologi yang praktis, saya terbuka untuk berdiskusi.",
     "button": "Hubungi saya"
   },

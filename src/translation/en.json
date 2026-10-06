@@ -20,6 +20,7 @@
     "title-second-emphasis": "systems",
     "title-ending": ".",
     "description": "I’m an HR Manager with 9+ years of experience helping organizations improve their people, processes, and workplace systems. As a BNSP Certified HR Manager with full-stack development skills, I connect organizational needs with practical digital solutions.",
+    "based": "Based in",
     "stats": {
       "years": "Years in HR",
       "projects": "Digital Projects",
@@ -97,7 +98,7 @@
   },
   "testimonials": {
     "tag": "Testimonials",
-    "title": "What Do",
+    "title": "What Do ",
     "title-1": "They Say?",
     "description": "Testimonials from those who have worked with me.",
     "cta-text": "Know me or have we worked together? Your words would mean a lot — feel free to share your experience here.",
@@ -107,8 +108,9 @@
     "go-to": "Go to testimonial {{number}}"
   },
   "cta": {
-    "title": "Tell me about your",
-    "title-emphasis": "challenge",
+    "title": "Good work begins with a",
+    "title-emphasis": "conversation",
+    "title-ending": ".",
     "description": "Whether you are building a stronger people function, improving organizational processes, or exploring practical technology solutions, I would be glad to connect.",
     "button": "Get in touch"
   },
