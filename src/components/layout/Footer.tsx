@@ -19,7 +19,7 @@ export default function Footer() {
           <p className="ed-serif italic shrink-0 tracking-tight md:text-lg ed-accent-em font-semibold">Faqih Nur Fahmi</p>
 
           {/* Mobile: ikon; desktop: label teks */}
-          <div className="flex items-center gap-5 md:gap-6">
+          <div className="flex items-center gap-3 md:gap-6">
             {socialLinks.map(({ href, label, Icon }) => (
               <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="ed-link md:text-[11px] md:uppercase md:tracking-[0.18em]">
                 <Icon size={18} strokeWidth={1.5} className="md:hidden" />

@@ -47,7 +47,7 @@ export default function HeroSection() {
           </p>
 
           {/* Headline — HR is the primary professional identity */}
-          <h1 className="ed-serif mt-4 text-[3rem] leading-[1.1] tracking-tight sm:text-6xl lg:text-[5.5rem]">
+          <h1 className="ed-serif mt-4 text-[2.75rem] leading-[1.1] tracking-tight sm:text-6xl lg:text-[5.5rem]">
             {t("hero.title-first")} <em className="ed-accent-em">{t("hero.title-first-emphasis")}</em> {t("hero.title-connector")} <em className="ed-accent-em">{t("hero.title-second-emphasis")}</em>
             {t("hero.title-ending")}
           </h1>
