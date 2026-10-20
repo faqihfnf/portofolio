@@ -6,7 +6,7 @@ import { Inter, Poppins } from "next/font/google";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import { Toaster } from "sonner";
-import ReduxProvider from "@/providers/ReduxProvider";
+import ThemeProvider from "@/providers/ThemeProvider";
 import I18nProvider from "@/providers/I18nProvider";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -22,9 +22,6 @@ export const metadata: Metadata = {
   description: "Faqih Nur Fahmi is an HR Manager and BNSP Certified HR Manager with 9+ years of experience in people management, organizational development, and practical digital solutions.",
   authors: [{ name: "Faqih Nur Fahmi", url: "https://faqih.id" }],
   creator: "Faqih Nur Fahmi",
-  alternates: {
-    canonical: "/",
-  },
   robots: {
     index: true,
     follow: true,
@@ -76,17 +73,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang="en" className="" data-scroll-behavior="smooth">
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={`${inter.className} ${poppins.className}`}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }} />
         <I18nProvider>
-          <ReduxProvider>
+          <ThemeProvider>
             <Navbar />
             <main className="min-h-screen">{children}</main>
             <Toaster />
             <Footer />
             <Analytics />
-          </ReduxProvider>
+          </ThemeProvider>
         </I18nProvider>
       </body>
     </html>

@@ -49,7 +49,7 @@ function RichTextContent({ richText }: { richText: RichText[] }) {
           if (annotations.underline) node = <u key={i}>{node}</u>;
           if (href) {
             node = (
-              <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="text-[var(--ed-accent)] hover:text-[var(--ed-accent-hover)] transition-colors">
+              <a key={i} href={href} target="_blank" rel="noopener noreferrer" className="text-[var(--ed-accent)] underline decoration-1 underline-offset-4 transition-colors hover:decoration-2">
                 {node}
               </a>
             );
@@ -326,7 +326,7 @@ function BlockRenderer({ block, blocks }: { block: NotionBlock; blocks: NotionBl
       if (youtubeMatch) {
         return (
           <div className="my-6 aspect-video rounded-lg overflow-hidden">
-            <iframe src={`https://www.youtube.com/embed/${youtubeMatch[1]}`} className="w-full h-full" allowFullScreen />
+            <iframe src={`https://www.youtube.com/embed/${youtubeMatch[1]}`} title="YouTube video" loading="lazy" className="w-full h-full" allowFullScreen />
           </div>
         );
       }
@@ -344,7 +344,7 @@ function BlockRenderer({ block, blocks }: { block: NotionBlock; blocks: NotionBl
       if (!url) return null;
       return (
         <div className="my-6 aspect-video rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
-          <iframe src={url} className="w-full h-full" />
+          <iframe src={url} title="Embedded content" loading="lazy" className="w-full h-full" />
         </div>
       );
     }

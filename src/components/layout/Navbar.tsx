@@ -6,9 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, Moon, Sun, X } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/redux/store";
-import { toggleTheme } from "@/app/redux/features/themeSlices";
+import { useTheme } from "next-themes";
 import SwitchTranslation from "@/components/layout/SwitchTranslation";
 import { fraunces, inter } from "@/components/editorial/fonts";
 import { useTranslation } from "react-i18next";
@@ -16,8 +14,9 @@ import { useTranslation } from "react-i18next";
 export default function Navbar() {
   const { t } = useTranslation();
   const pathname = usePathname();
-  const dispatch = useDispatch<AppDispatch>();
-  const theme = useSelector((state: RootState) => state.theme.theme);
+  const { resolvedTheme, setTheme } = useTheme();
+  // Tema baru diketahui di client — sebelum mount, ikon dirender kosong agar tidak hydration mismatch
+  const [mounted, setMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -31,6 +30,11 @@ export default function Navbar() {
     { name: t("navbar.nav-item-7"), link: "https://slides.faqih.id/" },
     { name: t("navbar.nav-item-5"), link: "/contact" },
   ];
+
+  useEffect(() => setMounted(true), []);
+
+  const toggleTheme = () => setTheme(resolvedTheme === "dark" ? "light" : "dark");
+  const themeIcon = (size: number) => (!mounted ? <span className="block" style={{ width: size, height: size }} /> : resolvedTheme === "dark" ? <Moon size={size} /> : <Sun size={size} />);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 24);
@@ -65,19 +69,19 @@ export default function Navbar() {
               </Link>
             ))}
             <span className="h-4 w-px bg-[var(--ed-border)]" />
-            <button onClick={() => dispatch(toggleTheme())} aria-label="Toggle theme" className="cursor-pointer text-[var(--ed-text-secondary)] transition-colors hover:text-[var(--ed-accent)]">
-              {theme === "dark" ? <Moon size={15} /> : <Sun size={15} />}
+            <button onClick={toggleTheme} aria-label="Toggle theme" className="cursor-pointer text-[var(--ed-text-secondary)] transition-colors hover:text-[var(--ed-accent)]">
+              {themeIcon(15)}
             </button>
             <SwitchTranslation />
           </div>
 
           {/* Mobile toggle */}
           <div className="flex items-center gap-3 md:hidden">
-            <button onClick={() => dispatch(toggleTheme())} aria-label="Toggle theme" className="cursor-pointer text-[var(--ed-text-secondary)] transition-colors hover:text-[var(--ed-accent)]">
-              {theme === "dark" ? <Moon size={17} /> : <Sun size={17} />}
+            <button onClick={toggleTheme} aria-label="Toggle theme" className="cursor-pointer text-[var(--ed-text-secondary)] transition-colors hover:text-[var(--ed-accent)]">
+              {themeIcon(17)}
             </button>
             <SwitchTranslation />
-            <button onClick={() => setIsMobileMenuOpen((prev) => !prev)} aria-label="Toggle menu" className="cursor-pointer text-[var(--ed-text-secondary)] transition-colors hover:text-[var(--ed-accent)]">
+            <button onClick={() => setIsMobileMenuOpen((prev) => !prev)} aria-label="Toggle menu" aria-expanded={isMobileMenuOpen} aria-controls="mobile-menu" className="cursor-pointer text-[var(--ed-text-secondary)] transition-colors hover:text-[var(--ed-accent)]">
               {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
@@ -86,7 +90,7 @@ export default function Navbar() {
         {/* Mobile menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (
-            <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }} className="border-t border-[var(--ed-border)] bg-[var(--ed-bg)] md:hidden">
+            <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }} id="mobile-menu" className="border-t border-[var(--ed-border)] bg-[var(--ed-bg)] md:hidden">
               <div className="flex flex-col px-6 py-4">
                 {navItems.map((item) => (
                   <Link

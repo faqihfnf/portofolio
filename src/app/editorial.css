@@ -5,9 +5,9 @@
   --ed-bg-elevated: #ecebe5;
   --ed-text: #1b1c1e;
   --ed-text-secondary: #4a4a46;
-  --ed-text-muted: #8b897f;
+  --ed-text-muted: #6b6960; /* was #8B897F — 3.2:1 → 5:1 (4.6:1 di bg-elevated) */
   --ed-border: #d8d6ce;
-  --ed-accent: #8a6f3f;
+  --ed-accent: #7d6439; /* was #8A6F3F — 4.3:1 → 5:1 (4.7:1 di bg-elevated) */
   background-color: var(--ed-bg);
   color: var(--ed-text);
   font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -43,10 +43,19 @@
   --ed-bg-elevated: #202124;
   --ed-text: #edebe4;
   --ed-text-secondary: #a5a39a;
-  --ed-text-muted: #86847a; /* was #6B6A64 — 3.14:1 → 4.54:1 */
+  --ed-text-muted: #8f8d83; /* was #86847A — 4.3:1 di bg-elevated → 4.8:1 */
   --ed-border: #2e2f31;
   --ed-accent: #a2895b; /* sudah aman, tidak perlu diubah */
   --ed-accent-text: #a2895b;
+}
+
+/* Latar body mengikuti token editorial (dulu dipegang wrapper ThemeProvider lama) */
+body {
+  background-color: #f4f3ef;
+}
+
+.dark body {
+  background-color: #1b1c1e;
 }
 
 .ed-serif {

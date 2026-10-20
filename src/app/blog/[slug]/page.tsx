@@ -7,6 +7,7 @@ import RelatedPosts from "../../../components/sections/blog/RelatedPosts";
 import { Metadata } from "next";
 import { fraunces, inter } from "@/components/editorial/fonts";
 import { ArrowLeft } from "lucide-react";
+import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -20,19 +21,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const posts = await getData();
   const page = posts.find((p) => p.slug === slug);
 
-  if (!page) {
-    return {
-      title: "Blog tidak ditemukan",
-      description: "Artikel yang Anda cari tidak tersedia.",
-    };
-  }
+  if (!page) notFound();
 
   // Gunakan description dari Notion, atau fallback
   const description = page.description || `Baca artikel ${page.title} oleh Faqih Nur Fahmi`;
   const coverUrl = page.cover;
 
   return {
-    title: `${page.title} | Faqih Nur Fahmi`,
+    // Suffix "| Faqih Nur Fahmi" sudah ditambahkan oleh title.template di root layout
+    title: page.title,
     description,
     openGraph: {
       title: page.title,
@@ -79,8 +76,11 @@ export default async function BlogDetailPage({ params }: PageProps) {
 
   const posts = await getData();
   const page = posts.find((p) => p.slug === slug);
-  const blocks = page ? await getPageBlocks(page.id) : [];
-  const headings = page ? extractHeadings(blocks) : [];
+  // Slug tidak dikenal → status 404 asli + halaman not-found, bukan 200 (soft 404)
+  if (!page) notFound();
+
+  const blocks = await getPageBlocks(page.id);
+  const headings = extractHeadings(blocks);
 
   return (
     <div className={`${fraunces.variable} ${inter.variable} editorial min-h-screen`}>
@@ -90,57 +90,48 @@ export default async function BlogDetailPage({ params }: PageProps) {
           Blog
         </Link>
 
-        {!page ? (
-          <div className="flex flex-col items-center justify-center py-40 text-center">
-            <h2 className="ed-serif text-3xl tracking-tight md:text-4xl">Blog tidak ditemukan</h2>
-            <p className="mt-3 text-[var(--ed-text-secondary)]">Sepertinya artikel yang Anda cari sudah tidak tersedia atau telah dipindahkan.</p>
-          </div>
-        ) : (
-          <>
-            {/* Header */}
-            <h1 className="ed-serif mt-8 text-3xl leading-tight tracking-tight md:text-[2.5rem] md:leading-[1.2]">{page.title}</h1>
+        {/* Header */}
+        <h1 className="ed-serif mt-8 text-3xl leading-tight tracking-tight md:text-[2.5rem] md:leading-[1.2]">{page.title}</h1>
 
-            {/* Meta: tanggal + kategori kecil */}
-            <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] uppercase tracking-[0.18em] text-[var(--ed-text-muted)]">
-              {page.date && (
-                <span>
-                  {new Date(page.date).toLocaleDateString("id-ID", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </span>
-              )}
-              {page.tags.length > 0 && <span>{page.tags.slice(0, 3).join(" · ")}</span>}
+        {/* Meta: tanggal + kategori kecil */}
+        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] uppercase tracking-[0.18em] text-[var(--ed-text-muted)]">
+          {page.date && (
+            <span>
+              {new Date(page.date).toLocaleDateString("id-ID", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
+          )}
+          {page.tags.length > 0 && <span>{page.tags.slice(0, 3).join(" · ")}</span>}
+        </div>
+
+        {/* Cover image */}
+        {page.cover && <img src={page.cover} alt={page.title} className="mt-8 aspect-[1200/630] w-full rounded-[2px] border border-[var(--ed-border)] object-cover" />}
+
+        <div className="mt-8  border-[var(--ed-border)] pt-10">
+          {/* Mobile TOC Dropdown */}
+          {headings.length > 0 && <TableOfContents headings={headings} variant="dropdown" />}
+
+          <div className="flex min-w-0 gap-12">
+            {/* Content utama */}
+            <div className="min-w-0 max-w-[640px] flex-1 overflow-hidden">
+              <NotionBlockRenderer blocks={blocks} />
             </div>
 
-            {/* Cover image */}
-            {page.cover && <img src={page.cover} alt={page.title} className="mt-8 aspect-[1200/630] w-full rounded-[2px] border border-[var(--ed-border)] object-cover" />}
-
-            <div className="mt-8  border-[var(--ed-border)] pt-10">
-              {/* Mobile TOC Dropdown */}
-              {headings.length > 0 && <TableOfContents headings={headings} variant="dropdown" />}
-
-              <div className="flex min-w-0 gap-12">
-                {/* Content utama */}
-                <div className="min-w-0 max-w-[640px] flex-1 overflow-hidden">
-                  <NotionBlockRenderer blocks={blocks} />
+            {/* Sidebar TOC */}
+            {headings.length > 0 && (
+              <div className="hidden w-60 flex-shrink-0 lg:block">
+                <div className="sticky top-24">
+                  <TableOfContents headings={headings} />
                 </div>
-
-                {/* Sidebar TOC */}
-                {headings.length > 0 && (
-                  <div className="hidden w-60 flex-shrink-0 lg:block">
-                    <div className="sticky top-24">
-                      <TableOfContents headings={headings} />
-                    </div>
-                  </div>
-                )}
               </div>
-            </div>
+            )}
+          </div>
+        </div>
 
-            <RelatedPosts current={page} posts={posts} />
-          </>
-        )}
+        <RelatedPosts current={page} posts={posts} />
       </div>
     </div>
   );

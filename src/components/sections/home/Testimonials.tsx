@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Linkedin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import SectionHeader from "@/components/editorial/SectionHeader";
@@ -23,6 +23,8 @@ export default function Testimonials() {
   const [data, setData] = useState<Testimonial[]>([]);
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [paused, setPaused] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     fetch("/api/testimonials")
@@ -42,12 +44,13 @@ export default function Testimonials() {
     setCurrent((prev) => (prev - 1 + data.length) % data.length);
   }, [data.length]);
 
-  // Auto-rotate every 6 seconds
+  // Auto-rotate every 6 seconds — berhenti saat di-hover/fokus, dan mati jika OS minta reduce motion
+  const autoRotate = data.length > 1 && !paused && !prefersReducedMotion;
   useEffect(() => {
-    if (data.length <= 1) return;
+    if (!autoRotate) return;
     const timer = setInterval(next, 6000);
     return () => clearInterval(timer);
-  }, [next, data.length]);
+  }, [next, autoRotate]);
 
   // Don't render section if no testimonials
   if (!loading && data.length === 0) return null;
@@ -74,8 +77,16 @@ export default function Testimonials() {
           </div>
         ) : (
           <AnimateOnScroll animation="fade-up" delay={150}>
-            <div className="relative mx-auto max-w-2xl">
-              <div className="rounded-lg border border-[var(--ed-border)] bg-[var(--ed-bg-elevated)] px-7 py-9 md:px-10">
+            <div
+              className="relative mx-auto max-w-2xl"
+              onMouseEnter={() => setPaused(true)}
+              onMouseLeave={() => setPaused(false)}
+              onFocus={() => setPaused(true)}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) setPaused(false);
+              }}
+            >
+              <div className="rounded-lg border border-[var(--ed-border)] bg-[var(--ed-bg-elevated)] px-7 py-9 md:px-10" aria-live={autoRotate ? "off" : "polite"}>
                 <AnimatePresence mode="wait">
                   <motion.div key={current} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.35 }}>
                     <p className="min-h-[10rem] text-md italic leading-relaxed tracking-tight ">{data[current].testimonial}</p>
@@ -110,6 +121,7 @@ export default function Testimonials() {
                         key={i}
                         onClick={() => setCurrent(i)}
                         aria-label={`Go to testimonial ${i + 1}`}
+                        aria-current={i === current}
                         className="h-1.5 w-1.5 rounded-full transition-all"
                         style={{ backgroundColor: i === current ? "var(--ed-accent)" : "var(--ed-border)" }}
                       />
@@ -129,9 +141,9 @@ export default function Testimonials() {
           <div className="mx-auto mt-14 max-w-xl border-t border-[var(--ed-border)] pt-10 text-center">
             <p className="leading-relaxed text-[var(--ed-text-secondary)]">{t("testimonials.cta-text")}</p>
             <div className="mt-6">
-              <Link href="/testimonials/create">
-                <EditorialButton variant="primary">{t("testimonials.cta-button")}</EditorialButton>
-              </Link>
+              <EditorialButton asChild variant="primary">
+                <Link href="/testimonials/create">{t("testimonials.cta-button")}</Link>
+              </EditorialButton>
             </div>
           </div>
         </AnimateOnScroll>

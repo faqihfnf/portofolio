@@ -182,3 +182,19 @@ html {
   opacity: 1;
   transform: translateX(0);
 }
+
+/* Pengunjung yang mengaktifkan "reduce motion" di OS: konten langsung tampil tanpa animasi */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .aos-init,
+  .animate-fade-in,
+  .animate-slide-left,
+  .animate-slide-right {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

@@ -11,9 +11,11 @@ const useLang = () => {
     localStorage.setItem("lang", lang);
   };
   useEffect(() => {
-    const lang = localStorage.getItem("lang");
-    i18n.changeLanguage(lang as string);
-    setLang((lang as LangType) ?? "en");
+    const lang = (localStorage.getItem("lang") as LangType | null) ?? "en";
+    i18n.changeLanguage(lang);
+    setLang(lang);
+    // Screen reader & browser perlu tahu bahasa konten yang sedang tampil
+    document.documentElement.lang = lang;
   }, [lang]);
   return { lang, changeLanguage };
 };

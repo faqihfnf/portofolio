@@ -32,7 +32,7 @@ export default function HeroSection() {
 
   return (
     <section className="border-b border-[var(--ed-border)]">
-      <div className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-12 px-6 pb-16 pt-28 md:px-10 md:pb-24 md:pt-40 lg:grid-cols-[220px_1fr] lg:gap-16">
+      <div className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-12 px-6 pb-16 pt-28 md:px-10 md:pb-24 md:pt-34 lg:grid-cols-[220px_1fr] lg:gap-16">
         {/* Mobile: nama + tagline + deskripsi tampil pertama */}
         <AnimateOnScroll animation="fade-up" className="order-1 flex flex-col lg:order-2">
           {/* Role tag versi mobile — di atas eyebrow */}
@@ -41,7 +41,7 @@ export default function HeroSection() {
           {/* Eyebrow — identitas halaman */}
           <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--ed-text-muted)] sm:text-[16px]">
             {t("hero.eyebrow")}{" "}
-            <a href="/CV.pdf" target="_blank" rel="noopener noreferrer" className="text-[var(--ed-accent)] transition-colors hover:text-[var(--ed-accent)] hover:underline">
+            <a href="/CV.pdf" target="_blank" rel="noopener noreferrer" className="text-[var(--ed-accent)] underline decoration-1 underline-offset-4 transition-colors hover:decoration-2">
               {t("hero.cv")}
             </a>
           </p>

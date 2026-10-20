@@ -17,13 +17,16 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
+// Label terhubung ke input lewat htmlFor, pesan error lewat id `${id}-error` (dipakai aria-describedby)
 function Field({
+  id,
   label,
   required,
   optional,
   error,
   children,
 }: {
+  id: string;
   label: string;
   required?: boolean;
   optional?: boolean;
@@ -32,16 +35,29 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1 block text-[11px] uppercase tracking-[0.18em] text-[var(--ed-text-muted)]">
+      <label htmlFor={id} className="mb-1 block text-[11px] uppercase tracking-[0.18em] text-[var(--ed-text-muted)]">
         {label}
-        {required && <span className="ml-1 text-[var(--ed-accent)]">*</span>}
+        {required && (
+          <span aria-hidden="true" className="ml-1 text-[var(--ed-accent)]">
+            *
+          </span>
+        )}
         {optional && <span className="ml-2 normal-case tracking-normal opacity-70">(opsional)</span>}
       </label>
       {children}
-      {error && <p className="mt-1.5 text-xs text-[var(--ed-accent)]">{error}</p>}
+      {error && (
+        <p id={`${id}-error`} role="alert" className="mt-1.5 text-xs text-[var(--ed-accent)]">
+          {error}
+        </p>
+      )}
     </div>
   );
 }
+
+const errorProps = (id: string, error?: string) => ({
+  "aria-invalid": error ? true : undefined,
+  "aria-describedby": error ? `${id}-error` : undefined,
+});
 
 const underlineInput =
   "w-full border-0 border-b border-[var(--ed-border)] bg-transparent px-0 py-2 text-sm text-[var(--ed-text)] placeholder:text-[var(--ed-text-muted)] focus:outline-none focus:border-[var(--ed-accent)] transition-colors rounded-none";
@@ -49,6 +65,7 @@ const underlineInput =
 export default function CreateTestimonial() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
   const [charCount, setCharCount] = useState(0);
   const MAX_CHARS = 250;
 
@@ -62,6 +79,7 @@ export default function CreateTestimonial() {
 
   const onSubmit = async (data: FormData) => {
     setLoading(true);
+    setSubmitError(false);
     try {
       const res = await fetch("/api/testimonials", {
         method: "POST",
@@ -73,6 +91,7 @@ export default function CreateTestimonial() {
       setSuccess(true);
     } catch {
       setSuccess(false);
+      setSubmitError(true);
     } finally {
       setLoading(false);
     }
@@ -108,30 +127,33 @@ export default function CreateTestimonial() {
             </div>
 
             {/* Form — underline inputs */}
-            <form onSubmit={handleSubmit(onSubmit)} className="max-w-xl space-y-8">
+            <form onSubmit={handleSubmit(onSubmit)} className="max-w-xl space-y-8" noValidate>
               {/* Name */}
-              <Field label="Nama" required error={errors.name?.message}>
-                <input {...register("name")} className={underlineInput} placeholder="Nama lengkap Anda" />
+              <Field id="name" label="Nama" required error={errors.name?.message}>
+                <input id="name" autoComplete="name" aria-required="true" {...register("name")} {...errorProps("name", errors.name?.message)} className={underlineInput} placeholder="Nama lengkap Anda" />
               </Field>
 
               {/* Position & Company - 2 columns */}
               <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-                <Field label="Posisi" error={errors.position?.message}>
-                  <input {...register("position")} className={underlineInput} placeholder="Supervisor HR, Manager IT, dll" />
+                <Field id="position" label="Posisi" error={errors.position?.message}>
+                  <input id="position" autoComplete="organization-title" {...register("position")} {...errorProps("position", errors.position?.message)} className={underlineInput} placeholder="Supervisor HR, Manager IT, dll" />
                 </Field>
-                <Field label="Perusahaan" error={errors.company?.message}>
-                  <input {...register("company")} className={underlineInput} placeholder="PT ABC Indonesia" />
+                <Field id="company" label="Perusahaan" error={errors.company?.message}>
+                  <input id="company" autoComplete="organization" {...register("company")} {...errorProps("company", errors.company?.message)} className={underlineInput} placeholder="PT ABC Indonesia" />
                 </Field>
               </div>
 
               {/* LinkedIn */}
-              <Field label="LinkedIn" optional error={errors.linkedinUrl?.message}>
-                <input {...register("linkedinUrl")} className={underlineInput} placeholder="https://linkedin.com/in/namaanda" />
+              <Field id="linkedinUrl" label="LinkedIn" optional error={errors.linkedinUrl?.message}>
+                <input id="linkedinUrl" type="url" {...register("linkedinUrl")} {...errorProps("linkedinUrl", errors.linkedinUrl?.message)} className={underlineInput} placeholder="https://linkedin.com/in/namaanda" />
               </Field>
 
               {/* Testimonial */}
-              <Field label="Testimoni" required error={errors.testimonial?.message}>
+              <Field id="testimonial" label="Testimoni" required error={errors.testimonial?.message}>
                 <textarea
+                  id="testimonial"
+                  aria-required="true"
+                  {...errorProps("testimonial", errors.testimonial?.message)}
                   {...register("testimonial", {
                     onChange: (e) => setCharCount(e.target.value.length),
                   })}
@@ -147,6 +169,13 @@ export default function CreateTestimonial() {
                   </span>
                 </div>
               </Field>
+
+              {/* Pesan gagal kirim — sebelumnya gagal tanpa pemberitahuan */}
+              {submitError && (
+                <p role="alert" className="text-sm text-[var(--ed-accent)]">
+                  Testimoni gagal dikirim. Silakan coba lagi beberapa saat lagi.
+                </p>
+              )}
 
               {/* Submit */}
               <EditorialButton type="submit" disabled={loading} variant="primary">

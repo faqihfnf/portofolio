@@ -33,9 +33,9 @@ export default function NotFound() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <Link href="/">
-              <EditorialButton variant="primary">Back to Home</EditorialButton>
-            </Link>
+            <EditorialButton asChild variant="primary">
+              <Link href="/">Back to Home</Link>
+            </EditorialButton>
             <EditorialButton variant="secondary" onClick={() => history.back()}>
               Go Back
             </EditorialButton>
