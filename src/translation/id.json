@@ -111,7 +111,24 @@
     "title": "Karya yang baik selalu diawali dengan",
     "title-emphasis": "percakapan",
     "title-ending": ".",
-    "description": "Baik Anda sedang membangun fungsi SDM yang lebih kuat, meningkatkan proses organisasi, maupun mengeksplorasi solusi teknologi yang praktis, saya terbuka untuk berdiskusi.",
+    "description": "Saat ini saya terbuka untuk hal-hal berikut. Jika salah satunya sesuai dengan kebutuhan Anda, mari berdiskusi.",
+    "items": {
+      "1": {
+        "tag": "Full-time",
+        "title": "Posisi HR",
+        "desc": "Peran di bidang manajemen SDM, pengembangan organisasi, dan digitalisasi HR."
+      },
+      "2": {
+        "tag": "Freelance / Proyek",
+        "title": "Pengembangan Web",
+        "desc": "Aplikasi web, tools internal, otomasi, dan dashboard yang dibangun dengan Next.js, React, dan TypeScript."
+      },
+      "3": {
+        "tag": "Acara",
+        "title": "Pembicara & Trainer",
+        "desc": "Webinar, workshop, dan pelatihan seputar praktik HR dan digitalisasi tempat kerja."
+      }
+    },
     "button": "Hubungi saya"
   },
   "experience": {
@@ -155,7 +172,7 @@
 
   "contact": {
     "title": "Hubungi Saya",
-    "description": "Jangan ragu untuk menghubungi saya untuk kolaborasi atau sekadar salam kenal!",
+    "description": "Punya proyek, undangan sebagai pembicara, atau peluang karier? Kirim pesan dan saya akan membalas dalam 24 jam.",
     "success-title": "Pesanmu sudah terkirim!",
     "success-body": "Terima kasih sudah meluangkan waktu menulis. Senang sekali bisa terhubung denganmu — aku akan segera membalas pesanmu, biasanya dalam 1×24 jam. Sampai jumpa lagi di sana!",
     "success-close": "Kembali"

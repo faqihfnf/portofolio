@@ -5,6 +5,7 @@ import ExperienceTimeline from "@/components/sections/experiences/ExperienceTime
 import { getExperienceData } from "@/data/experiences";
 import { useTranslation } from "react-i18next";
 import SectionHeader from "@/components/editorial/SectionHeader";
+import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 import { fraunces, inter } from "@/components/editorial/fonts";
 
 export default function ExperienceClient() {
@@ -22,15 +23,17 @@ export default function ExperienceClient() {
   return (
     <div className={`${fraunces.variable} ${inter.variable} editorial min-h-screen`}>
       <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-28 md:px-10 md:pb-28 md:pt-36">
-        <SectionHeader
-          tag="Experience"
-          title={
-            <>
-              {t("experience.title").replace(" Saya", "")} <em className="ed-accent-em">&amp; Journey</em>
-            </>
-          }
-          description={t("experience.description")}
-        />
+        <AnimateOnScroll animation="fade-up">
+          <SectionHeader
+            tag="Experience"
+            title={
+              <>
+                {t("experience.title").replace(" Saya", "")} <em className="ed-accent-em">&amp; Journey</em>
+              </>
+            }
+            description={t("experience.description")}
+          />
+        </AnimateOnScroll>
 
         {/* Tab — teks minimal dengan underline bronze */}
         <div className="flex gap-8 ">

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { BlogPost } from "@/services/notionServices";
 import { useTranslation } from "react-i18next";
 import SectionHeader from "@/components/editorial/SectionHeader";
+import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 import { fraunces, inter } from "@/components/editorial/fonts";
 import { EditorialButton } from "@/components/editorial/EditorialButton";
 
@@ -60,7 +61,9 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
   return (
     <div className={`${fraunces.variable} ${inter.variable} editorial min-h-screen`}>
       <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-28 md:px-10 md:pb-28 md:pt-36">
-        <SectionHeader tag="Blog" title={t("blog.title")} description={t("blog.description")} />
+        <AnimateOnScroll animation="fade-up">
+          <SectionHeader tag="Blog" title={t("blog.title")} description={t("blog.description")} />
+        </AnimateOnScroll>
 
         {/* Filter tag — section bar ala koran: hairline atas-bawah, 1 baris, scroll horizontal di mobile */}
         {allTags.length > 1 && (

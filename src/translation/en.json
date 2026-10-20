@@ -111,7 +111,24 @@
     "title": "Good work begins with a",
     "title-emphasis": "conversation",
     "title-ending": ".",
-    "description": "Whether you are building a stronger people function, improving organizational processes, or exploring practical technology solutions, I would be glad to connect.",
+    "description": "I'm currently open to the following. If one of them fits what you need, let's talk.",
+    "items": {
+      "1": {
+        "tag": "Full-time",
+        "title": "HR Roles",
+        "desc": "Roles in HR management, organizational development, and HR digitalization."
+      },
+      "2": {
+        "tag": "Freelance / Project",
+        "title": "Web Development",
+        "desc": "Web applications, internal tools, automation, and dashboards built with Next.js, React, and TypeScript."
+      },
+      "3": {
+        "tag": "Events",
+        "title": "Speaking & Training",
+        "desc": "Webinars, workshops, and training sessions on HR practice and workplace digitalization."
+      }
+    },
     "button": "Get in touch"
   },
 
@@ -156,7 +173,7 @@
 
   "contact": {
     "title": "Get in Touch",
-    "description": "Feel free to reach out for collaborations or just a friendly hello!",
+    "description": "Have a project, a speaking invitation, or a career opportunity in mind? Send me a message and I'll get back to you within 24 hours.",
     "success-title": "Your message is on its way!",
     "success-body": "Thank you for taking the time to write. I'm really glad we got connected — I'll get back to you soon, usually within 24 hours. Talk to you soon!",
     "success-close": "Back"
