@@ -11,7 +11,8 @@ export interface BlogPost {
   cover: string | null;
   createdAt: string | null;
   updatedAt: string | null;
-  date: string | null; // UpdatedAt ?? CreatedAt — dipakai untuk urutan & tampilan
+  publishedAt: string | null;
+  date: string | null; // PublishedAt ?? CreatedAt — dipakai untuk urutan & tampilan
   description: string;
   tags: string[];
   featured: boolean;
@@ -76,7 +77,7 @@ export async function getData(): Promise<BlogPost[]> {
       property: "Status",
       select: { equals: "Published" },
     },
-    sorts: [{ property: "CreatedAt", direction: "descending" }],
+    sorts: [{ property: "PublishedAt", direction: "descending" }],
   });
 
   const results: BlogPost[] = (raw.results as PageObjectResponse[]).map((page) => {
@@ -116,7 +117,13 @@ export async function getData(): Promise<BlogPost[]> {
       updatedAt = updatedProp.date.start;
     }
 
-    const date = updatedAt ?? createdAt;
+    let publishedAt: string | null = null;
+    const publishedProp = page.properties.PublishedAt;
+    if (publishedProp?.type === "date" && publishedProp.date?.start) {
+      publishedAt = publishedProp.date.start;
+    }
+
+    const date = publishedAt ?? createdAt;
 
     let description = "";
     const descProp = page.properties.Description;
@@ -135,10 +142,10 @@ export async function getData(): Promise<BlogPost[]> {
       featured = featuredProp.checkbox;
     }
 
-    return { id: page.id, title, slug, cover, description, createdAt, updatedAt, date, tags, featured };
+    return { id: page.id, title, slug, cover, description, createdAt, updatedAt, publishedAt, date, tags, featured };
   });
 
-  // Featured selalu paling atas, sisanya urut UpdatedAt ?? CreatedAt terbaru
+  // Featured selalu paling atas, sisanya urut PublishedAt ?? CreatedAt terbaru
   const time = (p: BlogPost) => (p.date ? new Date(p.date).getTime() : 0);
   results.sort((a, b) => Number(b.featured) - Number(a.featured) || time(b) - time(a));
 

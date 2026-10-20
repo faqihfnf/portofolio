@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url: `https://faqih.id/blog/${slug}`,
       ...(coverUrl ? { images: [{ url: coverUrl, width: 1200, height: 630, alt: page.title }] } : {}),
       siteName: "Faqih Nur Fahmi",
-      publishedTime: page.createdAt || undefined,
+      publishedTime: page.date || undefined,
       modifiedTime: page.updatedAt || undefined,
       authors: ["Faqih Nur Fahmi"],
     },
