@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import Link from "next/link";
 import { BlogPost } from "@/services/notionServices";
 import { useTranslation } from "react-i18next";
@@ -20,6 +20,7 @@ const INITIAL_COUNT = 5;
 export default function BlogListClient({ posts }: BlogListClientProps) {
   const [selectedTag, setSelectedTag] = useState("All");
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
+  const [searchQuery, setSearchQuery] = useState("");
   const tagScrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -27,7 +28,13 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
   const tagCounts = new Map<string, number>([["All", posts.length]]);
   posts.flatMap((post) => post.tags).forEach((tag) => tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1));
   const allTags = ["All", ...Array.from(tagCounts.keys()).filter((tag) => tag !== "All").sort()];
-  const filteredPosts = selectedTag === "All" ? posts : posts.filter((post) => post.tags.includes(selectedTag));
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const filteredPosts = posts.filter((post) => {
+    if (selectedTag !== "All" && !post.tags.includes(selectedTag)) return false;
+    if (!normalizedQuery) return true;
+    // Cari di judul, deskripsi, dan tag
+    return [post.title, post.description ?? "", ...post.tags].some((text) => text.toLowerCase().includes(normalizedQuery));
+  });
 
   // Tampilkan panah kiri/kanan hanya jika masih ada tag tersembunyi di arah itu
   const updateScrollArrows = () => {
@@ -64,6 +71,35 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
         <AnimateOnScroll animation="fade-up">
           <SectionHeader tag="Blog" title={t("blog.title")} description={t("blog.description")} />
         </AnimateOnScroll>
+
+        {/* Search bar — garis bawah saja, senada dengan gaya editorial */}
+        <div className="relative mb-6 flex items-center border-b border-[var(--ed-border)] transition-colors focus-within:border-[var(--ed-accent)]">
+          <Search size={16} strokeWidth={1.5} className="pointer-events-none flex-shrink-0 text-[var(--ed-text-muted)]" aria-hidden="true" />
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setVisibleCount(INITIAL_COUNT);
+            }}
+            placeholder={t("blog.searchPlaceholder")}
+            aria-label={t("blog.searchPlaceholder")}
+            className="w-full bg-transparent px-3 py-3 text-sm text-[var(--ed-text)] placeholder:text-[var(--ed-text-muted)] focus:outline-none [&::-webkit-search-cancel-button]:hidden"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              aria-label={t("blog.clearSearch")}
+              onClick={() => {
+                setSearchQuery("");
+                setVisibleCount(INITIAL_COUNT);
+              }}
+              className="flex-shrink-0 cursor-pointer text-[var(--ed-text-muted)] transition-colors hover:text-[var(--ed-accent)]"
+            >
+              <X size={16} strokeWidth={1.5} />
+            </button>
+          )}
+        </div>
 
         {/* Filter tag — section bar ala koran: hairline atas-bawah, 1 baris, scroll horizontal di mobile */}
         {allTags.length > 1 && (
@@ -158,7 +194,22 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
         {/* Empty state */}
         {filteredPosts.length === 0 && (
           <p className="py-20 text-center text-[var(--ed-text-muted)]">
-            Tidak ada post dengan tag <span className="text-[var(--ed-text-secondary)]">{selectedTag}</span>.
+            {normalizedQuery ? (
+              <>
+                {t("blog.noSearchResults")} <span className="text-[var(--ed-text-secondary)]">&ldquo;{searchQuery.trim()}&rdquo;</span>
+                {selectedTag !== "All" && (
+                  <>
+                    {" "}
+                    · {selectedTag}
+                  </>
+                )}
+                .
+              </>
+            ) : (
+              <>
+                {t("blog.noTagResults")} <span className="text-[var(--ed-text-secondary)]">{selectedTag}</span>.
+              </>
+            )}
           </p>
         )}
 

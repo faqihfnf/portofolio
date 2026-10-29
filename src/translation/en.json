@@ -167,8 +167,12 @@
 
   "blog": {
     "title": "My Blog",
-    "description": "A collection of my thoughts, tutorials, and experiences.",
-    "related": "Other Writings"
+    "description": "A collection of my notes, tutorials, and experiences.",
+    "related": "Other Writings",
+    "searchPlaceholder": "Search articles...",
+    "clearSearch": "Clear search",
+    "noSearchResults": "No articles match",
+    "noTagResults": "No posts with tag"
   },
 
   "contact": {

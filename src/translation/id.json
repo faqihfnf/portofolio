@@ -166,8 +166,12 @@
 
   "blog": {
     "title": "Blog Saya",
-    "description": "Kumpulan pemikiran, tutorial, dan pengalaman saya.",
-    "related": "Tulisan Lainnya"
+    "description": "Kumpulan catatan, tutorial, dan pengalaman saya.",
+    "related": "Tulisan Lainnya",
+    "searchPlaceholder": "Cari artikel...",
+    "clearSearch": "Hapus pencarian",
+    "noSearchResults": "Tidak ada artikel yang cocok dengan",
+    "noTagResults": "Tidak ada post dengan tag"
   },
 
   "contact": {
