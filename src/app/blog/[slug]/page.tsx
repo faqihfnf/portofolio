@@ -25,7 +25,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   // Gunakan description dari Notion, atau fallback
   const description = page.description || `Baca artikel ${page.title} oleh Faqih Nur Fahmi`;
-  const coverUrl = page.cover;
 
   return {
     // Suffix "| Faqih Nur Fahmi" sudah ditambahkan oleh title.template di root layout
@@ -36,7 +35,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       type: "article",
       url: `https://faqih.id/blog/${slug}`,
-      ...(coverUrl ? { images: [{ url: coverUrl, width: 1200, height: 630, alt: page.title }] } : {}),
+      // og:image diisi otomatis oleh ./opengraph-image.tsx (cover Notion di-proxy ke URL permanen)
       siteName: "Faqih Nur Fahmi",
       publishedTime: page.date || undefined,
       modifiedTime: page.updatedAt || undefined,
@@ -46,7 +45,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       card: "summary_large_image",
       title: page.title,
       description,
-      ...(coverUrl ? { images: [coverUrl] } : {}),
     },
     alternates: {
       canonical: `https://faqih.id/blog/${slug}`,
