@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { X } from "lucide-react";
+import { Download, X } from "lucide-react";
 import { EditorialButton } from "@/components/editorial/EditorialButton";
 import DownloadForm from "./DownloadForm";
 
@@ -55,7 +55,8 @@ export default function MobileDownloadBar({ slug, title, hideAtId }: MobileDownl
             transition={{ duration: 0.25, ease: "easeOut" }}
             className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--ed-border)] bg-[var(--ed-bg)] px-6 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]"
           >
-            <EditorialButton type="button" variant="primary" onClick={() => setOpen(true)} aria-haspopup="dialog" className="w-full bg-[var(--ed-accent)] text-[var(--ed-bg)]">
+            <EditorialButton type="button" variant="solid" onClick={() => setOpen(true)} aria-haspopup="dialog" className="w-full">
+              <Download size={14} strokeWidth={1.5} aria-hidden="true" />
               Unduh Gratis
             </EditorialButton>
           </motion.div>

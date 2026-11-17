@@ -15,6 +15,8 @@ const editorialButtonVariants = cva(
       variant: {
         /** Aksen bronze — untuk CTA utama */
         primary: "border-[var(--ed-accent)] text-[var(--ed-text)] hover:bg-[var(--ed-accent)] hover:text-[var(--ed-bg)]",
+        /** Bronze penuh — untuk aksi utama yang harus paling menonjol (mis. unduh ebook) */
+        solid: "border-[var(--ed-accent)] bg-[var(--ed-accent)] text-[var(--ed-bg)] hover:opacity-85",
         /** Netral — untuk CTA sekunder */
         secondary: "border-[var(--ed-border)] text-[var(--ed-text)] hover:border-[var(--ed-accent)] hover:text-[var(--ed-accent)]",
       },

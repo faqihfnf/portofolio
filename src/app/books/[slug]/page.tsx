@@ -2,7 +2,8 @@ import { ReactNode } from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Share2 } from "lucide-react";
+import { ArrowLeft, Download, Share2 } from "lucide-react";
+import { EditorialButton } from "@/components/editorial/EditorialButton";
 import { fraunces, inter } from "@/components/editorial/fonts";
 import NotionBlockRenderer from "@/components/sections/blog/NotionBlockRenderer";
 import Accordion, { type AccordionItem } from "@/components/sections/books/Accordion";
@@ -132,7 +133,7 @@ export default async function BookDetailPage({ params }: PageProps) {
           Buku
         </Link>
 
-        {/* 1. Hero — cover di kiri, informasi buku + form unduh di kanan */}
+        {/* 1. Hero — cover di kiri, informasi buku di kanan */}
         <header className={`mt-8 ${TWO_COLUMN}`}>
           <div className="mx-auto w-full max-w-[220px] md:mx-0 md:max-w-none">
             {book.cover ? (
@@ -142,6 +143,14 @@ export default async function BookDetailPage({ params }: PageProps) {
                 <span className="ed-serif text-center text-xl italic leading-snug text-[var(--ed-text-muted)]">{book.title}</span>
               </div>
             )}
+
+            {/* Form unduh hanya ada di bawah. Desktop: tombol ini menggulir ke sana; mobile: tombol sticky + bottom sheet */}
+            <EditorialButton asChild variant="solid" className="mt-5 hidden w-full px-4 md:inline-flex">
+              <a href={`#${BOTTOM_FORM_ID}`}>
+                <Download size={14} strokeWidth={1.5} aria-hidden="true" />
+                Unduh Gratis
+              </a>
+            </EditorialButton>
           </div>
 
           <div data-no-justify className="min-w-0">
@@ -178,23 +187,20 @@ export default async function BookDetailPage({ params }: PageProps) {
 
             {book.synopsis && <p className="mt-6 max-w-xl leading-relaxed text-[var(--ed-text-secondary)]">{book.synopsis}</p>}
 
-            <ul className="mt-6 flex flex-wrap gap-2">
-              {infoChips.map((chip) => (
-                <li key={chip} className="rounded-[2px] border border-[var(--ed-border)] px-2.5 py-1 text-[11px] uppercase tracking-[0.14em] text-[var(--ed-text-secondary)]">
-                  {chip}
-                </li>
-              ))}
-            </ul>
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+              <ul className="flex flex-wrap gap-2">
+                {infoChips.map((chip) => (
+                  <li key={chip} className="rounded-[2px] border border-[var(--ed-border)] px-2.5 py-1 text-[11px] uppercase tracking-[0.14em] text-[var(--ed-text-secondary)]">
+                    {chip}
+                  </li>
+                ))}
+              </ul>
 
-            {/* Di mobile form diganti tombol sticky + bottom sheet (MobileDownloadBar) */}
-            <div className="mt-9 hidden border-t border-[var(--ed-border)] pt-8 md:block">
-              <DownloadForm slug={book.slug} />
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="ed-link inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] underline">
+                <Share2 size={14} strokeWidth={1.5} aria-hidden="true" />
+                Bagikan ke WhatsApp
+              </a>
             </div>
-
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="ed-link mt-7 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] underline">
-              <Share2 size={14} strokeWidth={1.5} aria-hidden="true" />
-              Bagikan ke WhatsApp
-            </a>
           </div>
         </header>
 
@@ -257,7 +263,7 @@ export default async function BookDetailPage({ params }: PageProps) {
           <Accordion items={faqItems} />
         </Section>
 
-        {/* 7. Form unduh sekali lagi */}
+        {/* 7. Form unduh (satu-satunya; tombol di hero & tombol sticky mobile mengarah ke sini) */}
         <Section id={BOTTOM_FORM_ID} title="Unduh">
           <p className="ed-serif text-2xl leading-snug tracking-tight md:text-3xl">
             Dapatkan ebook ini, <span className="ed-accent-em">gratis</span>.

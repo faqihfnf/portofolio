@@ -157,7 +157,7 @@ export default function DownloadForm({ slug, className }: DownloadFormProps) {
           </p>
         )}
 
-        <EditorialButton type="submit" variant="primary" disabled={isSubmitting} aria-busy={isSubmitting} className="w-full sm:w-auto">
+        <EditorialButton type="submit" variant="solid" disabled={isSubmitting} aria-busy={isSubmitting} className="w-full sm:w-auto">
           {isSubmitting && <Loader2 size={14} className="animate-spin" aria-hidden="true" />}
           {isSubmitting ? "Mengirim…" : "Kirim ke Email Saya"}
         </EditorialButton>
