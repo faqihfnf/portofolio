@@ -26,6 +26,7 @@ export default function Navbar() {
     { name: t("navbar.nav-item-3"), link: "/projects" },
     { name: t("navbar.nav-item-4"), link: "/certificates" },
     { name: "Blog", link: "/blog" },
+    { name: t("navbar.nav-item-8"), link: "/books" },
     { name: t("navbar.nav-item-6"), link: "https://courses.faqih.id/" },
     { name: t("navbar.nav-item-7"), link: "https://slides.faqih.id/" },
     { name: t("navbar.nav-item-5"), link: "/contact" },

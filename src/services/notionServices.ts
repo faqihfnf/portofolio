@@ -49,7 +49,7 @@ interface CacheEntry {
 const cache = new Map<string, CacheEntry>();
 const CACHE_TTL = 1000 * 60 * 30;
 
-function getCache<T>(key: string): T | null {
+export function getCache<T>(key: string): T | null {
   const cached = cache.get(key);
   if (!cached) return null;
   if (Date.now() > cached.expiredAt) {
@@ -59,7 +59,7 @@ function getCache<T>(key: string): T | null {
   return cached.data as T;
 }
 
-function setCache(key: string, data: unknown): void {
+export function setCache(key: string, data: unknown): void {
   cache.set(key, { data, expiredAt: Date.now() + CACHE_TTL });
 }
 
