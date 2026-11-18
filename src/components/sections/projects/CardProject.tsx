@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Project } from "@/services/notionServices";
 import { useTranslation } from "react-i18next";
 

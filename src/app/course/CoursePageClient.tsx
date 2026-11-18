@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { EditorialButton } from "@/components/editorial/EditorialButton";
 import { fraunces, inter } from "@/components/editorial/fonts";
 

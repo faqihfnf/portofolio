@@ -39,7 +39,7 @@ export interface NotionBlock {
 }
 
 // ============================================================
-// Simple in-memory cache (30 menit)
+// Simple in-memory cache (5 menit)
 // ============================================================
 interface CacheEntry {
   data: unknown;

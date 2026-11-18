@@ -42,16 +42,6 @@ export default function GithubContribution() {
   const [languages, setLanguages] = useState<Language[]>([]);
   const [topRepos, setTopRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isDark, setIsDark] = useState(true);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    const update = () => setIsDark(root.classList.contains("dark"));
-    update();
-    const observer = new MutationObserver(update);
-    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     fetch("/api/github-contributions")

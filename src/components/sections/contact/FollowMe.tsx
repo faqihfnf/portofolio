@@ -1,6 +1,5 @@
 "use client";
-import { Github, Linkedin, Youtube, Instagram } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 export function FollowMe() {
   const socials = [

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import emailjs from "@emailjs/browser";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { EditorialButton } from "@/components/editorial/EditorialButton";
 import EditorialDialog from "@/components/editorial/EditorialDialog";
 import { useTranslation } from "react-i18next";

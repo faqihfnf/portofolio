@@ -2,8 +2,6 @@
 
 import React, { useState } from "react";
 import { NotionBlock } from "@/services/notionServices";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import CustomCodeBlock from "./CodeBlock";
 
 // ============================================================
@@ -65,7 +63,7 @@ function RichTextContent({ richText }: { richText: RichText[] }) {
 // ============================================================
 // Toggle Block
 // ============================================================
-function ToggleBlock({ block, blocks }: { block: NotionBlock; blocks: NotionBlock[] }) {
+function ToggleBlock({ block }: { block: NotionBlock }) {
   const [open, setOpen] = useState(false);
   const data = (block as any).toggle;
 
@@ -195,7 +193,7 @@ export default function NotionBlockRenderer({ blocks }: NotionBlockRendererProps
       continue;
     }
 
-    renderedBlocks.push(<BlockRenderer key={block.id} block={block} blocks={blocks} />);
+    renderedBlocks.push(<BlockRenderer key={block.id} block={block} />);
     i++;
   }
 
@@ -205,7 +203,7 @@ export default function NotionBlockRenderer({ blocks }: NotionBlockRendererProps
 // ============================================================
 // Single Block Renderer
 // ============================================================
-function BlockRenderer({ block, blocks }: { block: NotionBlock; blocks: NotionBlock[] }) {
+function BlockRenderer({ block }: { block: NotionBlock }) {
   switch (block.type) {
     case "heading_1": {
       const data = (block as any).heading_1;
@@ -287,7 +285,7 @@ function BlockRenderer({ block, blocks }: { block: NotionBlock; blocks: NotionBl
     }
 
     case "toggle": {
-      return <ToggleBlock block={block} blocks={blocks} />;
+      return <ToggleBlock block={block} />;
     }
 
     case "table": {
