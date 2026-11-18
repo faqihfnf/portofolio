@@ -34,7 +34,7 @@ export default function HeroSection() {
     <section className="border-b border-[var(--ed-border)]">
       <div className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-12 px-6 pb-16 pt-28 md:px-10 md:pb-24 md:pt-34 lg:grid-cols-[220px_1fr] lg:gap-16">
         {/* Mobile: nama + tagline + deskripsi tampil pertama */}
-        <AnimateOnScroll animation="fade-up" className="order-1 flex flex-col lg:order-2">
+        <AnimateOnScroll immediate className="order-1 flex flex-col lg:order-2">
           {/* Role tag versi mobile — di atas eyebrow */}
           <div className="mb-6 lg:hidden">{roleTag}</div>
 
@@ -73,7 +73,7 @@ export default function HeroSection() {
         </AnimateOnScroll>
 
         {/* Mobile: stats + sosial tampil setelahnya (role tag hanya di desktop) */}
-        <AnimateOnScroll animation="slide-right" className="order-2 flex flex-col gap-8 lg:order-1">
+        <AnimateOnScroll immediate delay={150} className="order-2 flex flex-col gap-8 lg:order-1">
           <div className="hidden lg:block">{roleTag}</div>
           <StatRow stats={stats} vertical />
           <div className="flex gap-5">

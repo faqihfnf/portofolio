@@ -14,20 +14,20 @@ export default function ContactPageClient() {
   return (
     <div className={`${fraunces.variable} ${inter.variable} editorial min-h-screen`}>
       <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-28 md:px-10 md:pb-28 md:pt-36">
-        <AnimateOnScroll animation="fade-up">
+        <AnimateOnScroll immediate>
           <SectionHeader tag={t("contact.tag")} title={t("contact.title")} description={t("contact.description")} />
         </AnimateOnScroll>
 
         <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_300px] lg:gap-16">
-          <AnimateOnScroll animation="fade-up" delay={100}>
+          <AnimateOnScroll immediate delay={100}>
             <ContactForm />
           </AnimateOnScroll>
 
           <div className="flex flex-col gap-12">
-            <AnimateOnScroll animation="fade-up" delay={200}>
+            <AnimateOnScroll immediate delay={200}>
               <ContactInfo />
             </AnimateOnScroll>
-            <AnimateOnScroll animation="fade-up" delay={300}>
+            <AnimateOnScroll immediate delay={300}>
               <FollowMe />
             </AnimateOnScroll>
           </div>

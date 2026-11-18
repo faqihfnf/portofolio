@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import emailjs from "@emailjs/browser";
-import { motion } from "motion/react";
 import { EditorialButton } from "@/components/editorial/EditorialButton";
 import EditorialDialog from "@/components/editorial/EditorialDialog";
 import { useTranslation } from "react-i18next";
@@ -87,7 +86,7 @@ export function ContactForm() {
   };
 
   return (
-    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+    <div>
       <h2 className="ed-serif text-2xl tracking-tight">{t("contact.form-title")}</h2>
       <form className="mt-8 space-y-8" onSubmit={handleSubmit(onSubmit)} noValidate>
         {/* Name */}
@@ -137,6 +136,6 @@ export function ContactForm() {
           {t("contact.success-body")}
         </p>
       </EditorialDialog>
-    </motion.div>
+    </div>
   );
 }

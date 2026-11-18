@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { Project } from "@/services/notionServices";
 import { useTranslation } from "react-i18next";
+import { enterOnLoad } from "@/components/ui/animate-on-scroll";
 
 interface CardProjectProps {
   project: Project;
@@ -12,11 +13,13 @@ interface CardProjectProps {
 export default function CardProject({ project, index }: CardProjectProps) {
   const { title, description, technologies, slug, liveUrl, githubUrl } = project;
   const { t } = useTranslation();
+  const enter = enterOnLoad(index, 3, 100);
 
   return (
     <motion.li
-      className="grid grid-cols-[48px_1fr] gap-4 border-b border-[var(--ed-border)] py-9 md:grid-cols-[80px_1fr] md:gap-10 md:py-11"
-      initial={{ opacity: 0, y: 24 }}
+      className={`grid grid-cols-[48px_1fr] gap-4 border-b border-[var(--ed-border)] py-9 md:grid-cols-[80px_1fr] md:gap-10 md:py-11 ${enter?.className ?? ""}`}
+      style={enter?.style}
+      initial={enter ? false : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.55, delay: (index % 6) * 0.1 }}

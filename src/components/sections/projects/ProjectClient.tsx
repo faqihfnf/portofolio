@@ -25,7 +25,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
   return (
     <div className={`${fraunces.variable} ${inter.variable} editorial min-h-screen`}>
       <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-28 md:px-10 md:pb-28 md:pt-36">
-        <AnimateOnScroll animation="fade-up">
+        <AnimateOnScroll immediate>
           <SectionHeader tag={t("projects.tag")} title={t("projects.title")} description={t("projects.description")} />
         </AnimateOnScroll>
 

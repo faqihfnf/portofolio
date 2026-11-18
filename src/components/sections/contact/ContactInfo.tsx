@@ -1,5 +1,4 @@
 "use client";
-import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 
 export function ContactInfo() {
@@ -11,7 +10,7 @@ export function ContactInfo() {
   ];
 
   return (
-    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}>
+    <div>
       <h2 className="text-[11px] uppercase tracking-[0.22em] text-[var(--ed-text-muted)]">{t("contact.info-title")}</h2>
       <ul className="mt-5 space-y-4">
         {items.map((item) => (
@@ -27,6 +26,6 @@ export function ContactInfo() {
           </li>
         ))}
       </ul>
-    </motion.div>
+    </div>
   );
 }

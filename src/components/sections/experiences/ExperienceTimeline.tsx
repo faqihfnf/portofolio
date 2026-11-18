@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "motion/react";
 import React from "react";
 
 interface Experience {
@@ -20,12 +19,10 @@ export default function ExperienceTimeline({ experiences }: ExperienceTimelinePr
   return (
     <ol className="border-t border-[var(--ed-border)]">
       {experiences.map((exp, index) => (
-        <motion.li
+        <li
           key={`${exp.title}-${exp.period}`}
-          className="grid grid-cols-1 gap-3 border-b border-[var(--ed-border)] py-9 md:grid-cols-[80px_1fr] md:gap-10 md:py-11"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: index * 0.12 }}
+          className="animate-enter grid grid-cols-1 gap-3 border-b border-[var(--ed-border)] py-9 md:grid-cols-[80px_1fr] md:gap-10 md:py-11"
+          style={{ animationDelay: `${index * 120}ms` }}
         >
           {/* Nomor italic serif */}
           <span className="ed-serif text-2xl italic text-[var(--ed-text-muted)]">{String(index + 1).padStart(2, "0")}</span>
@@ -59,7 +56,7 @@ export default function ExperienceTimeline({ experiences }: ExperienceTimelinePr
               </p>
             )}
           </div>
-        </motion.li>
+        </li>
       ))}
     </ol>
   );

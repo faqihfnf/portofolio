@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 import SectionHeader from "@/components/editorial/SectionHeader";
 import { fraunces, inter } from "@/components/editorial/fonts";
-import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
+import { AnimateOnScroll, enterOnLoad } from "@/components/ui/animate-on-scroll";
 import { categorySlug } from "@/lib/books";
 import type { Book } from "@/services/books/types";
 import BookCard from "./BookCard";
@@ -42,7 +42,7 @@ export default function BookListClient({ books }: { books: Book[] }) {
   return (
     <div className={`${fraunces.variable} ${inter.variable} editorial min-h-screen`}>
       <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-28 md:px-10 md:pb-28 md:pt-36">
-        <AnimateOnScroll animation="fade-up">
+        <AnimateOnScroll immediate>
           <SectionHeader
             tag={t("books.tag")}
             title={
@@ -83,11 +83,14 @@ export default function BookListClient({ books }: { books: Book[] }) {
 
         {filteredBooks.length > 0 ? (
           <ul className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 md:gap-x-8 md:gap-y-14 lg:grid-cols-4">
-            {filteredBooks.map((book, index) => (
-              <motion.li key={book.id} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: 0.45, delay: (index % 4) * 0.06 }}>
-                <BookCard book={book} />
-              </motion.li>
-            ))}
+            {filteredBooks.map((book, index) => {
+              const enter = enterOnLoad(index, 4, 60);
+              return (
+                <motion.li key={book.id} className={enter?.className} style={enter?.style} initial={enter ? false : { opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-40px" }} transition={{ duration: 0.45, delay: (index % 4) * 0.06 }}>
+                  <BookCard book={book} />
+                </motion.li>
+              );
+            })}
           </ul>
         ) : (
           // Tampilan kosong — belum ada buku Published

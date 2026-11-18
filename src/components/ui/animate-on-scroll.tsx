@@ -8,6 +8,22 @@ interface AnimateOnScrollProps {
   className?: string;
   delay?: number;
   animation?: "fade-up" | "fade-in" | "slide-left" | "slide-right";
+  /**
+   * Untuk konten di layar pertama (hero): animasi CSS murni yang langsung berjalan saat halaman
+   * dilukis, tanpa menunggu JavaScript. Tanpa ini konten disembunyikan (opacity 0) sampai JS
+   * selesai dimuat dan IntersectionObserver berjalan, sehingga halaman terasa lambat.
+   */
+  immediate?: boolean;
+}
+
+/**
+ * Untuk item daftar (motion.li dengan whileInView): item di layar pertama memakai animasi CSS
+ * `animate-enter` yang tidak menunggu JavaScript, item berikutnya tetap muncul saat di-scroll.
+ * Mengembalikan null untuk item di luar layar pertama.
+ */
+export function enterOnLoad(index: number, firstScreen: number, stepMs: number) {
+  if (index >= firstScreen) return null;
+  return { className: "animate-enter", style: { animationDelay: `${index * stepMs}ms` } };
 }
 
 export function AnimateOnScroll({
@@ -15,10 +31,12 @@ export function AnimateOnScroll({
   className = "",
   delay = 0,
   animation = "fade-up",
+  immediate = false,
 }: AnimateOnScrollProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (immediate) return;
     const element = ref.current;
     if (!element) return;
 
@@ -41,7 +59,15 @@ export function AnimateOnScroll({
     return () => {
       if (element) observer.unobserve(element);
     };
-  }, [delay]);
+  }, [delay, immediate]);
+
+  if (immediate) {
+    return (
+      <div className={cn("animate-enter", className)} style={delay ? { animationDelay: `${delay}ms` } : undefined}>
+        {children}
+      </div>
+    );
+  }
 
   const animationClasses = {
     "fade-up": "animate-fade-up",

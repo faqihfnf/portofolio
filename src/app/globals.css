@@ -183,6 +183,26 @@ html {
   transform: translateX(0);
 }
 
+/* --------------------------------------------------
+   Animasi masuk tanpa JavaScript — untuk konten di layar pertama (hero).
+   Berjalan begitu halaman dilukis, jadi teks tidak menunggu JS diunduh dan dijalankan
+   seperti .aos-init (yang tetap dipakai untuk section di bawah layar).
+   -------------------------------------------------- */
+@keyframes enter-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-enter {
+  animation: enter-fade-up 0.6s ease-out both;
+}
+
 /* Pengunjung yang mengaktifkan "reduce motion" di OS: konten langsung tampil tanpa animasi */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -196,5 +216,9 @@ html {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+
+  .animate-enter {
+    animation: none;
   }
 }

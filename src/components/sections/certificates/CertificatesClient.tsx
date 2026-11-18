@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { certificates, type CertificateItem } from "@/data/certificates";
 import { useTranslation } from "react-i18next";
 import SectionHeader from "@/components/editorial/SectionHeader";
-import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
+import { AnimateOnScroll, enterOnLoad } from "@/components/ui/animate-on-scroll";
 import { fraunces, inter } from "@/components/editorial/fonts";
 import { EditorialButton } from "@/components/editorial/EditorialButton";
 
@@ -69,44 +69,48 @@ export default function CertificatesClient() {
   return (
     <div className={`${fraunces.variable} ${inter.variable} editorial min-h-screen`}>
       <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-28 md:px-10 md:pb-28 md:pt-36">
-        <AnimateOnScroll animation="fade-up">
+        <AnimateOnScroll immediate>
           <SectionHeader tag={t("certificates.tag")} title={t("certificates.title")} description={t("certificates.description")} />
         </AnimateOnScroll>
 
         {/* Daftar bernomor — baris tipis, bukan grid kartu */}
         <ol className="border-t border-[var(--ed-border)]">
-          {certificates.slice(0, visibleCount).map((cert, index) => (
-            <motion.li
-              key={cert.id}
-              className="grid grid-cols-[48px_1fr] gap-4 border-b border-[var(--ed-border)] py-7 md:grid-cols-[80px_1fr_auto] md:gap-10"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: (index % 8) * 0.08 }}
-            >
-              {/* Nomor tetap bisa diklik mouse, tapi tidak masuk urutan Tab (duplikat tombol judul) */}
-              <button
-                onClick={() => setSelectedCert(cert)}
-                className="ed-serif cursor-pointer self-start text-2xl italic text-[var(--ed-text-muted)] transition-colors hover:text-[var(--ed-accent)]"
-                tabIndex={-1}
-                aria-hidden="true"
+          {certificates.slice(0, visibleCount).map((cert, index) => {
+            const enter = enterOnLoad(index, 6, 80);
+            return (
+              <motion.li
+                key={cert.id}
+                className={`grid grid-cols-[48px_1fr] gap-4 border-b border-[var(--ed-border)] py-7 md:grid-cols-[80px_1fr_auto] md:gap-10 ${enter?.className ?? ""}`}
+                style={enter?.style}
+                initial={enter ? false : { opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: (index % 8) * 0.08 }}
               >
-                {String(index + 1).padStart(2, "0")}
-              </button>
-
-              <button onClick={() => setSelectedCert(cert)} className="cursor-pointer text-left" aria-label={`${t("certificates.view")} ${cert.title}`}>
-                <h3 className="ed-serif text-lg tracking-tight md:text-xl">{cert.title}</h3>
-                <p className="mt-1 text-[12px] uppercase tracking-[0.14em] text-[var(--ed-text-muted)]">{cert.organization}</p>
-                <span
-                  className="ed-link mt-3 inline-block text-[11px] uppercase tracking-[0.18em] text-[var(--ed-accent)]"
+                {/* Nomor tetap bisa diklik mouse, tapi tidak masuk urutan Tab (duplikat tombol judul) */}
+                <button
+                  onClick={() => setSelectedCert(cert)}
+                  className="ed-serif cursor-pointer self-start text-2xl italic text-[var(--ed-text-muted)] transition-colors hover:text-[var(--ed-accent)]"
+                  tabIndex={-1}
+                  aria-hidden="true"
                 >
-                  {t("certificates.view")}
-                </span>
-              </button>
+                  {String(index + 1).padStart(2, "0")}
+                </button>
 
-              <span className="col-start-2 self-start text-[11px] uppercase tracking-[0.18em] text-[var(--ed-text-muted)] md:col-start-3 md:self-center">{cert.date}</span>
-            </motion.li>
-          ))}
+                <button onClick={() => setSelectedCert(cert)} className="cursor-pointer text-left" aria-label={`${t("certificates.view")} ${cert.title}`}>
+                  <h3 className="ed-serif text-lg tracking-tight md:text-xl">{cert.title}</h3>
+                  <p className="mt-1 text-[12px] uppercase tracking-[0.14em] text-[var(--ed-text-muted)]">{cert.organization}</p>
+                  <span
+                    className="ed-link mt-3 inline-block text-[11px] uppercase tracking-[0.18em] text-[var(--ed-accent)]"
+                  >
+                    {t("certificates.view")}
+                  </span>
+                </button>
+
+                <span className="col-start-2 self-start text-[11px] uppercase tracking-[0.18em] text-[var(--ed-text-muted)] md:col-start-3 md:self-center">{cert.date}</span>
+              </motion.li>
+            );
+          })}
         </ol>
 
         {/* Load More — teks underline bronze */}
