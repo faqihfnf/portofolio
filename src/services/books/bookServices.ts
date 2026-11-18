@@ -4,6 +4,7 @@ import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { notion } from "@/lib/notion";
 import { blockRichText, plainTextOf, type NotionBlock } from "@/lib/notionBlocks";
 import { getCache, getPageBlocks, setCache } from "@/services/notionServices";
+import { mirrorNotionUrl, mirrorNotionUrls } from "@/services/notionImageMirror";
 import { BOOK_PROPS, BOOK_SECTION_HEADINGS, BOOK_STATUS, BOOK_TYPE } from "./properties";
 import type { Book, BookFaqItem, BookImage, BookSections } from "./types";
 
@@ -144,6 +145,15 @@ async function getInternalBooks(): Promise<InternalBook[]> {
   // Terbaru di atas; buku tanpa Tanggal Terbit di paling bawah
   const time = (book: InternalBook) => (book.publishedAt ? new Date(book.publishedAt).getTime() : 0);
   books.sort((a, b) => time(b) - time(a));
+
+  // Cover dan pratinjau unggahan Notion → CDN R2 bila sudah tersalin
+  await Promise.all(
+    books.map(async (book) => {
+      book.cover = book.cover ? await mirrorNotionUrl(book.cover) : null;
+      const urls = await mirrorNotionUrls(book.previews.map((preview) => preview.url));
+      book.previews = book.previews.map((preview, i) => ({ ...preview, url: urls[i] }));
+    }),
+  );
 
   setCache(cacheKey, books);
   return books;

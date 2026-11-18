@@ -2,6 +2,7 @@ import { isFullBlock } from "@notionhq/client";
 import type { PageObjectResponse, QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpoints";
 import type { NotionBlock } from "@/lib/notionBlocks";
 import { notion } from "../lib/notion";
+import { mirrorNotionUrls } from "./notionImageMirror";
 
 // ============================================================
 // Types
@@ -145,6 +146,10 @@ export async function getData(): Promise<BlogPost[]> {
   const time = (p: BlogPost) => (p.date ? new Date(p.date).getTime() : 0);
   results.sort((a, b) => Number(b.featured) - Number(a.featured) || time(b) - time(a));
 
+  // Cover unggahan Notion → CDN R2 bila sudah tersalin
+  const covers = await mirrorNotionUrls(results.map((post) => post.cover));
+  results.forEach((post, i) => (post.cover = covers[i]));
+
   setCache(cacheKey, results);
   return results;
 }
@@ -239,6 +244,10 @@ export async function getProjects(): Promise<Project[]> {
     return a.order - b.order;
   });
 
+  // Cover unggahan Notion → CDN R2 bila sudah tersalin
+  const covers = await mirrorNotionUrls(results.map((project) => project.cover));
+  results.forEach((project, i) => (project.cover = covers[i]));
+
   setCache(cacheKey, results);
   return results;
 }
@@ -272,12 +281,29 @@ async function fetchBlocksRecursive(blockId: string): Promise<NotionBlock[]> {
   return blocks;
 }
 
+/** Gambar unggahan di isi halaman (termasuk blok anak) → CDN R2 bila sudah tersalin */
+async function mirrorBlockImages(blocks: NotionBlock[]): Promise<void> {
+  const images: Extract<NotionBlock, { type: "image" }>[] = [];
+  const collect = (list: NotionBlock[]) =>
+    list.forEach((block) => {
+      if (block.type === "image" && block.image.type === "file") images.push(block);
+      if (block.children) collect(block.children);
+    });
+  collect(blocks);
+
+  const urls = await mirrorNotionUrls(images.map((block) => (block.image.type === "file" ? block.image.file.url : "")));
+  images.forEach((block, i) => {
+    if (block.image.type === "file") block.image.file.url = urls[i];
+  });
+}
+
 export async function getPageBlocks(pageId: string): Promise<NotionBlock[]> {
   const cacheKey = `page-blocks-${pageId}`;
   const cached = getCache<NotionBlock[]>(cacheKey);
   if (cached) return cached;
 
   const blocks = await fetchBlocksRecursive(pageId);
+  await mirrorBlockImages(blocks);
   setCache(cacheKey, blocks);
   return blocks;
 }
