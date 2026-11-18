@@ -5,7 +5,7 @@ import { fraunces, inter } from "@/components/editorial/fonts";
 
 const socialLinks = [
   { href: "https://github.com/faqihfnf", label: "GitHub", Icon: Github },
-  { href: "https://www.linkedin.com/in/faqih-nur-fahmi-b51bb1ab/", label: "LinkedIn", Icon: Linkedin },
+  { href: "https://www.linkedin.com/in/faqihnurfahmi/", label: "LinkedIn", Icon: Linkedin },
   { href: "https://www.facebook.com/faqihnurfahmi", label: "Facebook", Icon: Facebook },
   { href: "https://www.youtube.com/@marifahid", label: "YouTube", Icon: Youtube },
   { href: "https://www.instagram.com/faqih.me", label: "Instagram", Icon: Instagram },

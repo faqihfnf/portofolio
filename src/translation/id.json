@@ -22,11 +22,39 @@
     "title-ending": ".",
     "description": "Saya adalah HR Manager dengan pengalaman lebih dari 9 tahun dalam membantu organisasi mengembangkan SDM, proses kerja, dan sistem di tempat kerja. Sebagai HR Manager bersertifikasi BNSP dengan kemampuan software engineering, saya menghubungkan kebutuhan organisasi dengan solusi digital yang praktis.",
     "based": "Domisili di",
+    "founder": "Founder",
     "stats": {
       "years": "Tahun di HR",
       "projects": "Proyek Digital",
       "technologies": "Teknologi yang Digunakan",
       "commits": "GitHub Commits"
+    }
+  },
+  "featured": {
+    "tag": "Produk Unggulan",
+    "title": "Yang Sedang Saya",
+    "title-emphasis": "Bangun",
+    "description": "Wawancarai adalah SaaS yang sudah live untuk membantu pencari kerja Indonesia menyiapkan lamaran, dibangun dari sudut pandang pewawancara.",
+    "status": "Live",
+    "story": "Selama bekerja di HR, saya terus melihat celah yang sama: kandidat dengan pengalaman nyata yang tidak tertulis di CV-nya, dan orang yang masuk ruang wawancara tanpa pernah berlatih. Wawancarai adalah jawaban saya untuk celah itu. Saya mendirikan dan membangunnya dari awal sampai akhir, mulai dari keputusan produk hingga engineering.",
+    "role-label": "Peran",
+    "role": "Founder · Product & Engineering",
+    "stack-label": "Dibangun dengan",
+    "image-alt": "Wawancarai: Lamaranmu layak disiapkan, bukan sekadar disebar.",
+    "button": "Kunjungi wawancarai.com",
+    "items": {
+      "1": {
+        "title": "Kecocokan CV & Lowongan",
+        "desc": "Membandingkan CV dengan lowongan, bahkan dari foto flyer, lalu menunjukkan bagian yang kuat dan yang masih kurang."
+      },
+      "2": {
+        "title": "Tulis Ulang CV yang Jujur",
+        "desc": "Menyesuaikan CV untuk posisi tertentu hanya dari fakta yang diberikan pengguna. Tidak ada kata dari iklan lowongan yang disalin."
+      },
+      "3": {
+        "title": "Latihan Wawancara Suara",
+        "desc": "Berlatih menjawab dengan suara dan mendapat umpan balik atas isi jawaban sekaligus cara penyampaiannya."
+      }
     }
   },
   "expertise": {

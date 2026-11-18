@@ -11,7 +11,7 @@ export default function HeroSection() {
 
   const socialLinks = [
     { href: "https://github.com/faqihfnf", label: "GitHub" },
-    { href: "https://www.linkedin.com/in/faqih-nur-fahmi-b51bb1ab/", label: "LinkedIn" },
+    { href: "https://www.linkedin.com/in/faqihnurfahmi/", label: "LinkedIn" },
     { href: "/CV.pdf", label: "CV" },
   ];
 
@@ -56,9 +56,18 @@ export default function HeroSection() {
           <p className="mt-6 max-w-xl sm:text-[16px] text-sm leading-relaxed text-[var(--ed-text-secondary)]">{t("hero.description")}</p>
 
           {/* Domisili — gaya dateline */}
-          <p className="mt-8 inline-flex items-baseline gap-3" data-no-justify>
+          <p className="mt-8 flex flex-wrap items-baseline gap-x-3 gap-y-1" data-no-justify>
             <span className="ed-serif  italic">
               <span className="text-[var(--ed-text-muted)]">{t("hero.based")}</span> <span className="text-[var(--ed-accent)]">Jakarta, Indonesia</span>
+            </span>
+            <span className="text-[var(--ed-border)]" aria-hidden="true">
+              /
+            </span>
+            <span className="ed-serif italic">
+              <span className="text-[var(--ed-text-muted)]">{t("hero.founder")}</span>{" "}
+              <a href="https://wawancarai.com" target="_blank" rel="noopener noreferrer" className="text-[var(--ed-accent)] underline decoration-1 underline-offset-4 transition-colors hover:decoration-2">
+                Wawancarai
+              </a>
             </span>
           </p>
         </AnimateOnScroll>

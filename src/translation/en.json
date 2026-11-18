@@ -22,11 +22,39 @@
     "title-ending": ".",
     "description": "I’m an HR Manager with 9+ years of experience helping organizations improve their people, processes, and workplace systems. As a BNSP Certified HR Manager with software engineering skills, I connect organizational needs with practical digital solutions.",
     "based": "Based in",
+    "founder": "Founder of",
     "stats": {
       "years": "Years in HR",
       "projects": "Digital Projects",
       "technologies": "Technologies Used",
       "commits": "GitHub Commits"
+    }
+  },
+  "featured": {
+    "tag": "Featured Product",
+    "title": "What I'm",
+    "title-emphasis": "Building",
+    "description": "Wawancarai is a live SaaS that helps Indonesian job seekers prepare their applications, built from the interviewer's side of the table.",
+    "status": "Live",
+    "story": "Working in HR, I kept seeing the same gap: candidates with real experience that never made it onto their CV, and people walking into interviews without ever having practiced. Wawancarai is my answer to that gap. I founded it and built it end to end, from product decisions to engineering.",
+    "role-label": "Role",
+    "role": "Founder · Product & Engineering",
+    "stack-label": "Built with",
+    "image-alt": "Wawancarai: Lamaranmu layak disiapkan, bukan sekadar disebar.",
+    "button": "Visit wawancarai.com",
+    "items": {
+      "1": {
+        "title": "CV & Job Match",
+        "desc": "Compares a CV against a job posting, even a photo of a job flyer, and shows what is strong and what is missing."
+      },
+      "2": {
+        "title": "Honest CV Rewrite",
+        "desc": "Tailors the CV to a specific role using only facts the user provides. Nothing is copied from the job ad."
+      },
+      "3": {
+        "title": "Voice Interview Practice",
+        "desc": "Practice answering out loud and get feedback on both the content and the delivery of each answer."
+      }
     }
   },
   "expertise": {

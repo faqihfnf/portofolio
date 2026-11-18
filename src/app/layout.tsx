@@ -51,15 +51,20 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Person + Organization saling merujuk lewat @id — schema.org menaruh
+  // properti `founder` di Organization, bukan di Person.
+  const PERSON_ID = "https://faqih.id/#person";
+  const WAWANCARAI_ID = "https://wawancarai.com/#organization";
+
   const personSchema = {
-    "@context": "https://schema.org",
     "@type": "Person",
+    "@id": PERSON_ID,
     name: "Faqih Nur Fahmi",
-    jobTitle: "HR Manager",
+    jobTitle: "HR Manager & Software Engineer",
     description: "HR Manager and BNSP Certified HR Manager with software engineering skills.",
     url: "https://faqih.id",
     image: "https://faqih.id/profil.png",
-    sameAs: ["https://github.com/faqihfnf", "https://www.linkedin.com/in/faqih-nur-fahmi-b51bb1ab/", "https://www.instagram.com/faqih.me", "https://www.youtube.com/@marifahid"],
+    sameAs: ["https://github.com/faqihfnf", "https://www.linkedin.com/in/faqihnurfahmi/", "https://www.instagram.com/faqih.me", "https://www.youtube.com/@marifahid"],
     knowsAbout: ["Human Resource Management", "People Management", "Organizational Development", "Digital Transformation", "Software Engineering"],
     hasCredential: {
       "@type": "EducationalOccupationalCredential",
@@ -70,12 +75,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         name: "BNSP",
       },
     },
+    worksFor: { "@id": WAWANCARAI_ID },
+  };
+
+  const wawancaraiSchema = {
+    "@type": "Organization",
+    "@id": WAWANCARAI_ID,
+    name: "Wawancarai",
+    url: "https://wawancarai.com",
+    description: "A SaaS that helps Indonesian job seekers prepare their applications: CV and job matching, honest CV rewriting, and voice interview practice.",
+    founder: { "@id": PERSON_ID },
+  };
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [personSchema, wawancaraiSchema],
   };
 
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={`${inter.className} ${poppins.className}`}>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
         <I18nProvider>
           <ThemeProvider>
             <Navbar />

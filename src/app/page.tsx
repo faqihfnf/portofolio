@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import AboutMe from "@/components/sections/home/AboutMe";
 import CallToAction from "@/components/sections/home/CallToAction";
+import FeaturedProduct from "@/components/sections/home/FeaturedProduct";
 import GithubContribution from "@/components/sections/home/GithubContribution";
 import HeroSection from "@/components/sections/home/HeroSection";
 import MyServices from "@/components/sections/home/MyServices";
@@ -20,6 +21,9 @@ export default function Home() {
 
       {/* Hero Section */}
       <HeroSection />
+
+      {/* Featured Product — Wawancarai */}
+      <FeaturedProduct />
 
       {/* My Services Section */}
       <MyServices />
