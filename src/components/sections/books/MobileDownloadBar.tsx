@@ -93,7 +93,7 @@ export default function MobileDownloadBar({ slug, title, hideAtId }: MobileDownl
                 </button>
               </div>
 
-              <DownloadForm slug={slug} className="mt-7" />
+              <DownloadForm slug={slug} className="mt-7" onDone={() => setOpen(false)} />
             </motion.div>
           </>
         )}

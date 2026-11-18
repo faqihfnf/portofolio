@@ -2,8 +2,9 @@ import { ReactNode } from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Download, Share2 } from "lucide-react";
+import { ArrowLeft, Download } from "lucide-react";
 import { EditorialButton } from "@/components/editorial/EditorialButton";
+import ShareMenu from "@/components/editorial/ShareMenu";
 import { fraunces, inter } from "@/components/editorial/fonts";
 import NotionBlockRenderer from "@/components/sections/blog/NotionBlockRenderer";
 import Accordion, { type AccordionItem } from "@/components/sections/books/Accordion";
@@ -123,7 +124,6 @@ export default async function BookDetailPage({ params }: PageProps) {
   const otherBooks = pickOtherBooks(book, books);
 
   const pageUrl = `${BOOKS_URL}/${book.slug}`;
-  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${book.title} — ebook gratis: ${pageUrl}`)}`;
 
   return (
     <div lang="id" className={`${fraunces.variable} ${inter.variable} editorial min-h-screen`}>
@@ -196,10 +196,7 @@ export default async function BookDetailPage({ params }: PageProps) {
                 ))}
               </ul>
 
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="ed-link inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] underline">
-                <Share2 size={14} strokeWidth={1.5} aria-hidden="true" />
-                Bagikan ke WhatsApp
-              </a>
+              <ShareMenu url={pageUrl} text={`${book.title} — ebook gratis:`} />
             </div>
           </div>
         </header>

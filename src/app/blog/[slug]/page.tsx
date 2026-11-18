@@ -7,6 +7,7 @@ import RelatedPosts from "../../../components/sections/blog/RelatedPosts";
 import { Metadata } from "next";
 import { fraunces, inter } from "@/components/editorial/fonts";
 import { ArrowLeft } from "lucide-react";
+import ShareMenu from "@/components/editorial/ShareMenu";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -103,6 +104,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
             </span>
           )}
           {page.tags.length > 0 && <span>{page.tags.slice(0, 3).join(" · ")}</span>}
+          <ShareMenu url={`https://faqih.id/blog/${slug}`} text={page.title} />
         </div>
 
         {/* Cover image */}
