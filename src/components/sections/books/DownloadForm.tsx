@@ -8,7 +8,7 @@ import { EditorialButton } from "@/components/editorial/EditorialButton";
 import EditorialDialog from "@/components/editorial/EditorialDialog";
 import { CONSENT_LABEL, PRIVACY_NOTE, SHARING_PERMISSION } from "@/data/books";
 import { downloadFormSchema, type DownloadFormData, type DownloadRequest, type DownloadResponse } from "@/services/books/downloadSchema";
-import Turnstile, { type TurnstileHandle } from "./Turnstile";
+import Turnstile, { type TurnstileHandle } from "@/components/ui/Turnstile";
 
 const GENERIC_ERROR = "Maaf, ebook belum berhasil dikirim. Silakan coba lagi beberapa saat lagi.";
 

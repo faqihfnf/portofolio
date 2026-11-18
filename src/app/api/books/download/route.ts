@@ -4,7 +4,7 @@ import { downloadRequestSchema, type DownloadResponse } from "@/services/books/d
 import { getBookPdf } from "@/services/books/drive";
 import { sendBookEmail } from "@/services/books/email";
 import { hasRecentRequest, saveReader } from "@/services/books/readerServices";
-import { verifyTurnstile } from "@/services/books/turnstile";
+import { verifyTurnstile } from "@/services/turnstile";
 
 // Mengambil PDF dari Drive lalu mengirimnya lewat Resend bisa makan beberapa detik
 export const maxDuration = 60;

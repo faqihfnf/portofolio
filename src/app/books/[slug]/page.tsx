@@ -137,9 +137,9 @@ export default async function BookDetailPage({ params }: PageProps) {
         <header className={`mt-8 ${TWO_COLUMN}`}>
           <div className="mx-auto w-full max-w-[220px] md:mx-0 md:max-w-none">
             {book.cover ? (
-              <img src={book.cover} alt={`Sampul ${book.title}`} className="w-full rounded-[2px] border border-[var(--ed-border)]" />
+              <img src={book.cover} alt={`Sampul ${book.title}`} className="w-full rounded-lg border border-[var(--ed-border)]" />
             ) : (
-              <div className="flex aspect-[5/7] items-center justify-center rounded-[2px] border border-[var(--ed-border)] bg-[var(--ed-bg-elevated)] p-6">
+              <div className="flex aspect-[5/7] items-center justify-center rounded-lg border border-[var(--ed-border)] bg-[var(--ed-bg-elevated)] p-6">
                 <span className="ed-serif text-center text-xl italic leading-snug text-[var(--ed-text-muted)]">{book.title}</span>
               </div>
             )}

@@ -2,22 +2,18 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { EditorialButton } from "@/components/editorial/EditorialButton";
 import EditorialDialog from "@/components/editorial/EditorialDialog";
 import { fraunces, inter } from "@/components/editorial/fonts";
-
-const schema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  position: z.string().optional(),
-  company: z.string().optional(),
-  testimonial: z.string().min(25, "Testimoni minimal 25 karakter").max(250, "Testimoni maksimal 250 karakter"),
-  linkedinUrl: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
-});
-
-type FormData = z.infer<typeof schema>;
+import Turnstile, { type TurnstileHandle } from "@/components/ui/Turnstile";
+import {
+  TESTIMONIAL_MAX_CHARS,
+  testimonialFormSchema,
+  type TestimonialFormData,
+  type TestimonialRequest,
+} from "@/services/testimonials/testimonialSchema";
 
 // Label terhubung ke input lewat htmlFor, pesan error lewat id `${id}-error` (dipakai aria-describedby)
 function Field({
@@ -67,9 +63,10 @@ const underlineInput =
 export default function CreateTestimonial() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [charCount, setCharCount] = useState(0);
-  const MAX_CHARS = 250;
+  const MAX_CHARS = TESTIMONIAL_MAX_CHARS;
+  const turnstileRef = useRef<TurnstileHandle>(null);
 
   const router = useRouter();
   const {
@@ -77,8 +74,9 @@ export default function CreateTestimonial() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
+  } = useForm<TestimonialFormData>({
+    resolver: zodResolver(testimonialFormSchema),
+    defaultValues: { name: "", position: "", company: "", testimonial: "", linkedinUrl: "", hpCheck: "" },
   });
 
   // Kosongkan form lalu tutup popup — tanpa memuat ulang halaman
@@ -88,22 +86,38 @@ export default function CreateTestimonial() {
     setSuccess(false);
   };
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: TestimonialFormData) => {
     setLoading(true);
-    setSubmitError(false);
+    setSubmitError(null);
+
+    let turnstileToken: string;
     try {
+      if (!turnstileRef.current) throw new Error("Turnstile belum siap");
+      turnstileToken = await turnstileRef.current.getToken();
+    } catch (error) {
+      console.error("Turnstile:", error);
+      turnstileRef.current?.reset();
+      setSubmitError("Verifikasi keamanan belum berhasil. Muat ulang halaman, lalu coba lagi.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const payload: TestimonialRequest = { ...data, turnstileToken };
       const res = await fetch("/api/testimonials", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) throw new Error("Failed");
       setSuccess(true);
     } catch {
       setSuccess(false);
-      setSubmitError(true);
+      setSubmitError("Testimoni gagal dikirim. Silakan coba lagi beberapa saat lagi.");
     } finally {
+      // Token Turnstile hanya sekali pakai
+      turnstileRef.current?.reset();
       setLoading(false);
     }
   };
@@ -137,7 +151,7 @@ export default function CreateTestimonial() {
         </div>
 
         {/* Form — underline inputs */}
-        <form onSubmit={handleSubmit(onSubmit)} className="max-w-xl space-y-8" noValidate>
+        <form onSubmit={(e) => handleSubmit(onSubmit)(e)} onFocus={() => turnstileRef.current?.prepare()} className="max-w-xl space-y-8" noValidate>
           {/* Name */}
           <Field id="name" label="Nama" required error={errors.name?.message}>
             <input id="name" autoComplete="name" aria-required="true" {...register("name")} {...errorProps("name", errors.name?.message)} className={underlineInput} placeholder="Nama lengkap Anda" />
@@ -180,10 +194,19 @@ export default function CreateTestimonial() {
             </div>
           </Field>
 
-          {/* Pesan gagal kirim — sebelumnya gagal tanpa pemberitahuan */}
+          {/* Honeypot — tersembunyi dari pengunjung, hanya bot yang mengisinya */}
+          <div aria-hidden="true" className="sr-only">
+            <label htmlFor="testimonial-hp">Jangan isi kolom ini</label>
+            <input id="testimonial-hp" type="text" tabIndex={-1} autoComplete="off" data-1p-ignore data-lpignore="true" {...register("hpCheck")} />
+          </div>
+
+          {/* Turnstile — hanya terlihat bila Cloudflare butuh interaksi */}
+          <Turnstile ref={turnstileRef} />
+
+          {/* Pesan gagal kirim */}
           {submitError && (
             <p role="alert" className="text-sm text-[var(--ed-accent)]">
-              Testimoni gagal dikirim. Silakan coba lagi beberapa saat lagi.
+              {submitError}
             </p>
           )}
 

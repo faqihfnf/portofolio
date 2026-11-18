@@ -11,7 +11,7 @@ interface BookCardProps {
 export default function BookCard({ book, headingAs: Heading = "h2" }: BookCardProps) {
   return (
     <Link href={`/books/${book.slug}`} data-no-justify className="group flex flex-col">
-      <div className="aspect-[5/7] overflow-hidden rounded-[2px] border border-[var(--ed-border)] bg-[var(--ed-bg-elevated)]">
+      <div className="aspect-[5/7] overflow-hidden rounded-lg border border-[var(--ed-border)] bg-[var(--ed-bg-elevated)]">
         {book.cover ? (
           <img src={book.cover} alt={`Sampul ${book.title}`} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]" />
         ) : (
