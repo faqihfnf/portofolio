@@ -165,13 +165,19 @@
     "title": "Ebook",
     "title-emphasis": "Gratis",
     "description": "Kumpulan terjemahan dan tulisan saya dalam format PDF.",
-    "filter-label": "Filter kategori",
+    "filter-label": "Filter topik",
     "all": "Semua",
     "empty-title": "Belum ada buku di rak ini.",
     "empty-description": "Buku pertama sedang disiapkan. Silakan berkunjung kembali dalam waktu dekat.",
     "by": "Oleh {{name}}",
     "work-of": "Karya {{author}}",
-    "translated-by": "Diterjemahkan oleh {{name}}"
+    "translated-by": "Diterjemahkan oleh {{name}}",
+    "search-placeholder": "Cari buku...",
+    "clear-search": "Hapus pencarian",
+    "no-search-results": "Tidak ada buku yang cocok dengan",
+    "no-topic-results": "Belum ada buku dengan topik",
+    "scroll-left": "Geser topik ke kiri",
+    "scroll-right": "Geser topik ke kanan"
   },
   "experience": {
     "tag": "Pengalaman",

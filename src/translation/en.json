@@ -166,13 +166,19 @@
     "title": "Free",
     "title-emphasis": "Ebooks",
     "description": "A collection of my translations and writings in PDF.",
-    "filter-label": "Filter by category",
+    "filter-label": "Filter by topic",
     "all": "All",
     "empty-title": "No books on this shelf yet.",
     "empty-description": "The first book is being prepared. Please check back soon.",
     "by": "By {{name}}",
     "work-of": "By {{author}}",
-    "translated-by": "Translated by {{name}}"
+    "translated-by": "Translated by {{name}}",
+    "search-placeholder": "Search books...",
+    "clear-search": "Clear search",
+    "no-search-results": "No books match",
+    "no-topic-results": "No books with topic",
+    "scroll-left": "Scroll topics left",
+    "scroll-right": "Scroll topics right"
   },
   "experience": {
     "tag": "Experience",

@@ -32,6 +32,5 @@ export const metadata: Metadata = {
 export default async function BooksPage() {
   const books = await getBooks();
 
-  // Tanpa <Suspense>: BookListClient membaca ?kategori= dari URL browser, bukan useSearchParams
   return <BookListClient books={books} />;
 }

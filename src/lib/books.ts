@@ -42,16 +42,6 @@ export function getAuthorLine(book: Book, labels: AuthorLineLabels = ID_AUTHOR_L
 
 export const isSamePerson = (name: string | null) => !name || name.trim().toLowerCase() === AUTHOR_NAME.toLowerCase();
 
-/** "HR & Karier" → "hr-karier" — dipakai untuk query param ?kategori= */
-export function categorySlug(category: string): string {
-  return category
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
 /**
  * Buku Lainnya: buku dari kategori yang sama lebih dulu. Kalau kategori itu
  * berisi kurang dari 3 buku lain, sisanya diisi buku terbaru.

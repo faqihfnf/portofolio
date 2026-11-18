@@ -1,58 +1,60 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
+import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import SectionHeader from "@/components/editorial/SectionHeader";
 import { fraunces, inter } from "@/components/editorial/fonts";
 import { AnimateOnScroll, enterOnLoad } from "@/components/ui/animate-on-scroll";
-import { categorySlug } from "@/lib/books";
 import type { Book } from "@/services/books/types";
 import BookCard from "./BookCard";
 
-const CATEGORY_PARAM = "kategori";
-const CATEGORY_EVENT = "book-category-change";
+const ALL = "All";
 
-// Kategori aktif dibaca langsung dari URL browser (?kategori=), bukan lewat useSearchParams: halaman ini
-// ISR, dan useSearchParams di halaman statis mewajibkan <Suspense> yang menunda hidrasi daftar buku.
-// Server selalu merender "Semua"; filter dari URL diterapkan setelah hidrasi tanpa hydration mismatch.
-const subscribeCategory = (onChange: () => void) => {
-  window.addEventListener("popstate", onChange);
-  window.addEventListener(CATEGORY_EVENT, onChange);
-  return () => {
-    window.removeEventListener("popstate", onChange);
-    window.removeEventListener(CATEGORY_EVENT, onChange);
-  };
-};
-const readCategory = () => new URLSearchParams(window.location.search).get(CATEGORY_PARAM) ?? "";
-const readCategoryOnServer = () => "";
-
+// Pencarian dan filter topik mengikuti halaman blog: state biasa, URL tidak berubah.
 export default function BookListClient({ books }: { books: Book[] }) {
   const { t } = useTranslation();
-  // Filter disimpan di URL (?kategori=agama) supaya bisa dibagikan
-  const activeSlug = useSyncExternalStore(subscribeCategory, readCategory, readCategoryOnServer);
+  const [selectedTopic, setSelectedTopic] = useState(ALL);
+  const [searchQuery, setSearchQuery] = useState("");
+  const topicScrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
-  const counts = new Map<string, number>();
-  books.forEach((book) => book.category && counts.set(book.category, (counts.get(book.category) ?? 0) + 1));
-  const categories = Array.from(counts.keys())
-    .sort((a, b) => a.localeCompare(b, "id"))
-    .map((name) => ({ name, slug: categorySlug(name), count: counts.get(name) ?? 0 }));
+  const topicCounts = new Map<string, number>([[ALL, books.length]]);
+  books.flatMap((book) => book.topics).forEach((topic) => topicCounts.set(topic, (topicCounts.get(topic) ?? 0) + 1));
+  const allTopics = [ALL, ...Array.from(topicCounts.keys()).filter((topic) => topic !== ALL).sort((a, b) => a.localeCompare(b, "id"))];
 
-  // Slug kategori yang tidak dikenal diperlakukan sebagai "Semua"
-  const activeCategory = categories.find((category) => category.slug === activeSlug) ?? null;
-  const filteredBooks = activeCategory ? books.filter((book) => book.category === activeCategory.name) : books;
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const filteredBooks = books.filter((book) => {
+    if (selectedTopic !== ALL && !book.topics.includes(selectedTopic)) return false;
+    if (!normalizedQuery) return true;
+    // Cari di judul (termasuk judul asli), penulis, penerjemah, sinopsis, kategori, dan topik
+    return [book.title, book.originalTitle, book.author, book.translator, book.synopsis, book.category, ...book.topics].some((text) => text?.toLowerCase().includes(normalizedQuery));
+  });
 
-  const selectCategory = (slug: string) => {
-    const params = new URLSearchParams(window.location.search);
-    if (slug) params.set(CATEGORY_PARAM, slug);
-    else params.delete(CATEGORY_PARAM);
-    const query = params.toString();
-    // replaceState tanpa memuat ulang data dari server, lalu beri tahu subscribeCategory
-    window.history.replaceState(null, "", query ? `?${query}` : window.location.pathname);
-    window.dispatchEvent(new Event(CATEGORY_EVENT));
+  // Tampilkan panah kiri/kanan hanya jika masih ada topik tersembunyi di arah itu
+  const updateScrollArrows = () => {
+    const el = topicScrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 4);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
   };
 
-  const tabs = [{ name: t("books.all"), slug: "", count: books.length }, ...categories];
+  useEffect(() => {
+    const el = topicScrollRef.current;
+    if (!el) return;
+    updateScrollArrows();
+    const observer = new ResizeObserver(updateScrollArrows);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [allTopics.length]);
+
+  const scrollTopics = (direction: -1 | 1) => {
+    const el = topicScrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: direction * el.clientWidth * 0.6, behavior: "smooth" });
+  };
 
   return (
     <div className={`${fraunces.variable} ${inter.variable} editorial min-h-screen`}>
@@ -69,26 +71,69 @@ export default function BookListClient({ books }: { books: Book[] }) {
           />
         </AnimateOnScroll>
 
-        {/* Filter kategori — section bar ala koran, senada dengan filter tag di blog */}
-        {categories.length > 1 && (
-          <nav aria-label={t("books.filter-label")} className="mb-10 border-y border-[var(--ed-border)]">
-            <div className="ed-scroll-x flex gap-x-7 md:flex-wrap">
-              {tabs.map((tab) => {
-                const isActive = (activeCategory?.slug ?? "") === tab.slug;
+        {/* Search bar — sama dengan halaman blog: garis bawah saja */}
+        {books.length > 0 && (
+          <div className="relative mb-6 flex items-center border-b border-[var(--ed-border)] transition-colors focus-within:border-[var(--ed-accent)]">
+            <Search size={16} strokeWidth={1.5} className="pointer-events-none flex-shrink-0 text-[var(--ed-text-muted)]" aria-hidden="true" />
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={t("books.search-placeholder")}
+              aria-label={t("books.search-placeholder")}
+              className="w-full bg-transparent px-3 py-3 text-sm text-[var(--ed-text)] placeholder:text-[var(--ed-text-muted)] focus:outline-none [&::-webkit-search-cancel-button]:hidden"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                aria-label={t("books.clear-search")}
+                onClick={() => setSearchQuery("")}
+                className="flex-shrink-0 cursor-pointer text-[var(--ed-text-muted)] transition-colors hover:text-[var(--ed-accent)]"
+              >
+                <X size={16} strokeWidth={1.5} />
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Filter topik — section bar ala koran, sama dengan filter tag di blog: 1 baris, scroll horizontal di mobile */}
+        {allTopics.length > 1 && (
+          <nav aria-label={t("books.filter-label")} className="relative mb-10 border-y border-[var(--ed-border)]">
+            {/* Panah carousel — hanya mobile, karena di desktop topik di-wrap */}
+            <button
+              type="button"
+              aria-label={t("books.scroll-left")}
+              onClick={() => scrollTopics(-1)}
+              className={`absolute inset-y-0 left-0 z-10 flex w-12 cursor-pointer items-center justify-start bg-gradient-to-r from-[var(--ed-bg)] from-50% to-transparent text-[var(--ed-text-secondary)] transition-opacity duration-200 hover:text-[var(--ed-accent)] md:hidden ${canScrollLeft ? "opacity-100" : "pointer-events-none opacity-0"}`}
+            >
+              <ChevronLeft size={16} strokeWidth={1.5} />
+            </button>
+            <button
+              type="button"
+              aria-label={t("books.scroll-right")}
+              onClick={() => scrollTopics(1)}
+              className={`absolute inset-y-0 right-0 z-10 flex w-12 cursor-pointer items-center justify-end bg-gradient-to-l from-[var(--ed-bg)] from-50% to-transparent text-[var(--ed-text-secondary)] transition-opacity duration-200 hover:text-[var(--ed-accent)] md:hidden ${canScrollRight ? "opacity-100" : "pointer-events-none opacity-0"}`}
+            >
+              <ChevronRight size={16} strokeWidth={1.5} />
+            </button>
+
+            <div ref={topicScrollRef} onScroll={updateScrollArrows} className="ed-scroll-x flex gap-x-7 md:flex-wrap">
+              {allTopics.map((topic) => {
+                const isActive = selectedTopic === topic;
                 return (
                   <button
-                    key={tab.slug || "semua"}
+                    key={topic}
                     type="button"
                     aria-pressed={isActive}
                     onClick={(e) => {
-                      selectCategory(tab.slug);
+                      setSelectedTopic(topic);
                       e.currentTarget.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
                     }}
                     className={`relative flex-shrink-0 cursor-pointer whitespace-nowrap py-3.5 text-[11px] uppercase tracking-[0.18em] transition-colors ${isActive ? "text-[var(--ed-accent)]" : "text-[var(--ed-text-muted)] hover:text-[var(--ed-text-secondary)]"}`}
                   >
-                    {tab.name}
-                    <sup className="ml-1 text-[9px] tracking-normal tabular-nums">{tab.count}</sup>
-                    {isActive && <motion.span layoutId="book-category-underline" className="absolute inset-x-0 bottom-0 h-px bg-[var(--ed-accent)]" transition={{ duration: 0.3, ease: "easeOut" }} />}
+                    {topic === ALL ? t("books.all") : topic}
+                    <sup className="ml-1 text-[9px] tracking-normal tabular-nums">{topicCounts.get(topic)}</sup>
+                    {isActive && <motion.span layoutId="book-topic-underline" className="absolute inset-x-0 bottom-0 h-px bg-[var(--ed-accent)]" transition={{ duration: 0.3, ease: "easeOut" }} />}
                   </button>
                 );
               })}
@@ -107,6 +152,20 @@ export default function BookListClient({ books }: { books: Book[] }) {
               );
             })}
           </ul>
+        ) : books.length > 0 ? (
+          // Tidak ada yang cocok dengan pencarian / topik
+          <p className="py-20 text-center text-[var(--ed-text-muted)]">
+            {normalizedQuery ? (
+              <>
+                {t("books.no-search-results")} <span className="text-[var(--ed-text-secondary)]">&ldquo;{searchQuery.trim()}&rdquo;</span>
+                {selectedTopic !== ALL && <> · {selectedTopic}</>}.
+              </>
+            ) : (
+              <>
+                {t("books.no-topic-results")} <span className="text-[var(--ed-text-secondary)]">{selectedTopic}</span>.
+              </>
+            )}
+          </p>
         ) : (
           // Tampilan kosong — belum ada buku Published
           <div className="border-y border-[var(--ed-border)] px-4 py-20 text-center">

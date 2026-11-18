@@ -14,7 +14,7 @@ import DownloadForm from "@/components/sections/books/DownloadForm";
 import MobileDownloadBar from "@/components/sections/books/MobileDownloadBar";
 import PreviewGallery from "@/components/sections/books/PreviewGallery";
 import { AUTHOR_BIO_FULL, AUTHOR_BIO_SHORT, AUTHOR_NAME, BOOKS_URL, GENERAL_FAQ, isPlaceholder } from "@/data/books";
-import { categorySlug, getAuthorLine, getTranslatorName, hasArabicScript, isSamePerson, pickOtherBooks } from "@/lib/books";
+import { getAuthorLine, getTranslatorName, hasArabicScript, isSamePerson, pickOtherBooks } from "@/lib/books";
 import { getBooks, getBookSections } from "@/services/books/bookServices";
 import NotionImage from "@/components/ui/NotionImage";
 
@@ -171,9 +171,7 @@ export default async function BookDetailPage({ params }: PageProps) {
             {(book.category || book.topics.length > 0) && (
               <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] uppercase tracking-[0.18em] text-[var(--ed-text-muted)]">
                 {book.category && (
-                  <Link href={`/books?kategori=${categorySlug(book.category)}`} className="text-[var(--ed-accent)] transition-opacity hover:opacity-70">
-                    {book.category}
-                  </Link>
+                  <span className="text-[var(--ed-accent)]">{book.category}</span>
                 )}
                 {book.topics.map((topic) => (
                   <span key={topic}>
