@@ -1,22 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { saveLang, type LangType } from "@/lib/i18n";
 
-type LangType = "en" | "id";
-
+// Bahasa aktif dibaca langsung dari i18next; useTranslation me-render ulang komponen saat bahasa berganti.
+// Pemulihan bahasa tersimpan dilakukan di I18nProvider.
 const useLang = () => {
-  const [lang, setLang] = useState<LangType>("en");
   const { i18n } = useTranslation();
-  const changeLanguage = (lang: LangType) => {
-    setLang(lang);
-    localStorage.setItem("lang", lang);
-  };
+  const lang: LangType = i18n.language === "id" ? "id" : "en";
+
+  // Screen reader & browser perlu tahu bahasa konten yang sedang tampil
   useEffect(() => {
-    const lang = (localStorage.getItem("lang") as LangType | null) ?? "en";
-    i18n.changeLanguage(lang);
-    setLang(lang);
-    // Screen reader & browser perlu tahu bahasa konten yang sedang tampil
     document.documentElement.lang = lang;
   }, [lang]);
+
+  const changeLanguage = (next: LangType) => {
+    i18n.changeLanguage(next);
+    saveLang(next);
+  };
+
   return { lang, changeLanguage };
 };
 

@@ -26,3 +26,28 @@ i18n
   });
 
 export default i18n;
+
+// ============================================================
+// Pilihan bahasa pengunjung, disimpan di localStorage.
+// localStorage bisa melempar error (mode privat Safari, situs diblokir) — bahasa tetap jalan tanpanya.
+// ============================================================
+export type LangType = "en" | "id";
+
+const STORAGE_KEY = "lang";
+
+export const readSavedLang = (): LangType | null => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved === "id" || saved === "en" ? saved : null;
+  } catch {
+    return null;
+  }
+};
+
+export const saveLang = (lang: LangType) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, lang);
+  } catch {
+    // Pilihan bahasa hanya tidak diingat
+  }
+};

@@ -1,36 +1,28 @@
 "use client";
 
 import React, { useState } from "react";
-import { NotionBlock } from "@/services/notionServices";
+import type { RichTextItemResponse } from "@notionhq/client/build/src/api-endpoints";
+import { blockRichText, plainTextOf, type NotionBlock } from "@/lib/notionBlocks";
 import CustomCodeBlock from "./CodeBlock";
+import NotionImage from "@/components/ui/NotionImage";
+
+type BlockOf<T extends NotionBlock["type"]> = Extract<NotionBlock, { type: T }>;
+
+/** URL file Notion: external (tautan biasa) atau file unggahan (URL bertanda tangan, kedaluwarsa ±1 jam) */
+const fileUrl = (file: { type: "external"; external: { url: string } } | { type: "file"; file: { url: string } }) =>
+  file.type === "external" ? file.external.url : file.file.url;
 
 // ============================================================
 // Rich Text Renderer
 // ============================================================
-interface RichText {
-  type: string;
-  text?: { content: string; link?: { url: string } | null };
-  annotations?: {
-    bold?: boolean;
-    italic?: boolean;
-    strikethrough?: boolean;
-    underline?: boolean;
-    code?: boolean;
-    color?: string;
-  };
-  plain_text?: string;
-  href?: string | null;
-}
-
-function RichTextContent({ richText }: { richText: RichText[] }) {
+function RichTextContent({ richText }: { richText: RichTextItemResponse[] }) {
   if (!richText || richText.length === 0) return null;
 
   return (
     <>
       {richText.map((text, i) => {
-        const content = text.plain_text || text.text?.content || "";
-        const annotations = text.annotations || {};
-        const href = text.href || text.text?.link?.url;
+        const content = text.plain_text;
+        const { annotations, href } = text;
 
         let node: React.ReactNode = content;
 
@@ -63,16 +55,15 @@ function RichTextContent({ richText }: { richText: RichText[] }) {
 // ============================================================
 // Toggle Block
 // ============================================================
-function ToggleBlock({ block }: { block: NotionBlock }) {
+function ToggleBlock({ block }: { block: BlockOf<"toggle"> }) {
   const [open, setOpen] = useState(false);
-  const data = (block as any).toggle;
 
   return (
     <div className="my-2">
       <button onClick={() => setOpen(!open)} className="flex items-start gap-2 w-full text-left group">
         <span className={`mt-1 text-[var(--ed-text-muted)] transition-transform duration-200 ${open ? "rotate-90" : ""}`}>▶</span>
         <span className="font-medium text-[var(--ed-text)] group-hover:text-[var(--ed-accent)] transition-colors">
-          <RichTextContent richText={data?.rich_text || []} />
+          <RichTextContent richText={block.toggle.rich_text} />
         </span>
       </button>
       {open && block.children && (
@@ -87,10 +78,9 @@ function ToggleBlock({ block }: { block: NotionBlock }) {
 // ============================================================
 // Table Block
 // ============================================================
-function TableBlock({ block }: { block: NotionBlock }) {
-  const tableData = (block as any).table;
-  const hasColumnHeader = tableData?.has_column_header ?? false;
-  const hasRowHeader = tableData?.has_row_header ?? false;
+function TableBlock({ block }: { block: BlockOf<"table"> }) {
+  const hasColumnHeader = block.table.has_column_header;
+  const hasRowHeader = block.table.has_row_header;
   const rows = block.children || [];
 
   return (
@@ -98,8 +88,7 @@ function TableBlock({ block }: { block: NotionBlock }) {
       <table className="w-full text-sm">
         <tbody>
           {rows.map((row, rowIndex) => {
-            const rowData = (row as any).table_row;
-            const cells: RichText[][] = rowData?.cells || [];
+            const cells = row.type === "table_row" ? row.table_row.cells : [];
             const isHeader = hasColumnHeader && rowIndex === 0;
 
             return (
@@ -148,19 +137,16 @@ export default function NotionBlockRenderer({ blocks }: NotionBlockRendererProps
       }
       renderedBlocks.push(
         <ol key={`ol-${block.id}`} className="list-decimal list-outside ml-6 my-3 space-y-1">
-          {group.map((b) => {
-            const data = (b as any).numbered_list_item;
-            return (
-              <li key={b.id} className="text-slate-700 dark:text-slate-300 leading-relaxed pl-1">
-                <RichTextContent richText={data?.rich_text || []} />
-                {b.children && (
-                  <div className="ml-4 mt-1">
-                    <NotionBlockRenderer blocks={b.children} />
-                  </div>
-                )}
-              </li>
-            );
-          })}
+          {group.map((b) => (
+            <li key={b.id} className="text-slate-700 dark:text-slate-300 leading-relaxed pl-1">
+              <RichTextContent richText={blockRichText(b)} />
+              {b.children && (
+                <div className="ml-4 mt-1">
+                  <NotionBlockRenderer blocks={b.children} />
+                </div>
+              )}
+            </li>
+          ))}
         </ol>,
       );
       continue;
@@ -175,19 +161,16 @@ export default function NotionBlockRenderer({ blocks }: NotionBlockRendererProps
       }
       renderedBlocks.push(
         <ul key={`ul-${block.id}`} className="list-disc list-outside ml-6 my-3 space-y-1">
-          {group.map((b) => {
-            const data = (b as any).bulleted_list_item;
-            return (
-              <li key={b.id} className="text-slate-700 dark:text-slate-300 leading-relaxed pl-1">
-                <RichTextContent richText={data?.rich_text || []} />
-                {b.children && (
-                  <div className="ml-4 mt-1">
-                    <NotionBlockRenderer blocks={b.children} />
-                  </div>
-                )}
-              </li>
-            );
-          })}
+          {group.map((b) => (
+            <li key={b.id} className="text-slate-700 dark:text-slate-300 leading-relaxed pl-1">
+              <RichTextContent richText={blockRichText(b)} />
+              {b.children && (
+                <div className="ml-4 mt-1">
+                  <NotionBlockRenderer blocks={b.children} />
+                </div>
+              )}
+            </li>
+          ))}
         </ul>,
       );
       continue;
@@ -205,36 +188,29 @@ export default function NotionBlockRenderer({ blocks }: NotionBlockRendererProps
 // ============================================================
 function BlockRenderer({ block }: { block: NotionBlock }) {
   switch (block.type) {
-    case "heading_1": {
-      const data = (block as any).heading_1;
+    case "heading_1":
       return (
         <h1 id={block.id.replace(/-/g, "")} className="text-3xl font-bold mt-10 mb-4 text-slate-900 dark:text-slate-100 scroll-mt-20">
-          <RichTextContent richText={data?.rich_text || []} />
+          <RichTextContent richText={block.heading_1.rich_text} />
         </h1>
       );
-    }
 
-    case "heading_2": {
-      const data = (block as any).heading_2;
+    case "heading_2":
       return (
         <h2 id={block.id.replace(/-/g, "")} className="text-2xl font-bold mt-8 mb-3 text-slate-900 dark:text-slate-100 scroll-mt-20">
-          <RichTextContent richText={data?.rich_text || []} />
+          <RichTextContent richText={block.heading_2.rich_text} />
         </h2>
       );
-    }
 
-    case "heading_3": {
-      const data = (block as any).heading_3;
+    case "heading_3":
       return (
         <h3 id={block.id.replace(/-/g, "")} className="text-xl font-semibold mt-6 mb-2 text-slate-900 dark:text-slate-100 scroll-mt-20">
-          <RichTextContent richText={data?.rich_text || []} />
+          <RichTextContent richText={block.heading_3.rich_text} />
         </h3>
       );
-    }
 
     case "paragraph": {
-      const data = (block as any).paragraph;
-      const richText = data?.rich_text || [];
+      const richText = block.paragraph.rich_text;
       if (richText.length === 0) {
         return <div className="h-4" />;
       }
@@ -245,20 +221,18 @@ function BlockRenderer({ block }: { block: NotionBlock }) {
       );
     }
 
-    case "code": {
+    case "code":
       return <CustomCodeBlock block={block} />;
-    }
 
     case "image": {
-      const data = (block as any).image;
-      const url = data?.type === "external" ? data.external?.url : data?.file?.url;
-      const caption = data?.caption || [];
+      const url = fileUrl(block.image);
+      const caption = block.image.caption;
 
       if (!url) return null;
 
       return (
         <figure className="my-6">
-          <img src={url} alt={caption.map((c: RichText) => c.plain_text).join("") || "Blog image"} className="w-full rounded-lg object-cover" />
+          <NotionImage src={url} alt={plainTextOf(caption) || "Blog image"} className="w-full rounded-lg object-cover" />
           {caption.length > 0 && (
             <figcaption className="text-sm text-slate-500 text-center mt-2">
               <RichTextContent richText={caption} />
@@ -268,12 +242,11 @@ function BlockRenderer({ block }: { block: NotionBlock }) {
       );
     }
 
-    case "quote": {
-      const data = (block as any).quote;
+    case "quote":
       return (
         <blockquote className="my-6 border-l-2 border-[var(--ed-accent)] px-4 py-2">
           <p className="text-lg italic text-justify leading-relaxed text-[var(--ed-text-secondary)]">
-            <RichTextContent richText={data?.rich_text || []} />
+            <RichTextContent richText={block.quote.rich_text} />
           </p>
           {block.children && (
             <div className="mt-2">
@@ -282,28 +255,24 @@ function BlockRenderer({ block }: { block: NotionBlock }) {
           )}
         </blockquote>
       );
-    }
 
-    case "toggle": {
+    case "toggle":
       return <ToggleBlock block={block} />;
-    }
 
-    case "table": {
+    case "table":
       return <TableBlock block={block} />;
-    }
 
-    case "divider": {
+    case "divider":
       return <hr className="my-8 border-slate-200 dark:border-slate-700" />;
-    }
 
     case "callout": {
-      const data = (block as any).callout;
-      const emoji = data?.icon?.type === "emoji" ? data.icon.emoji : "💡";
+      const icon = block.callout.icon;
+      const emoji = icon?.type === "emoji" ? icon.emoji : "💡";
       return (
         <div className="my-6 flex gap-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-4">
           <span className="text-xl flex-shrink-0">{emoji}</span>
           <div className="text-slate-700 dark:text-slate-300 leading-relaxed">
-            <RichTextContent richText={data?.rich_text || []} />
+            <RichTextContent richText={block.callout.rich_text} />
             {block.children && (
               <div className="mt-2">
                 <NotionBlockRenderer blocks={block.children} />
@@ -315,8 +284,7 @@ function BlockRenderer({ block }: { block: NotionBlock }) {
     }
 
     case "video": {
-      const data = (block as any).video;
-      const url = data?.type === "external" ? data.external?.url : data?.file?.url;
+      const url = fileUrl(block.video);
       if (!url) return null;
 
       // YouTube embed
@@ -337,8 +305,7 @@ function BlockRenderer({ block }: { block: NotionBlock }) {
     }
 
     case "embed": {
-      const data = (block as any).embed;
-      const url = data?.url;
+      const url = block.embed.url;
       if (!url) return null;
       return (
         <div className="my-6 aspect-video rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
@@ -348,8 +315,7 @@ function BlockRenderer({ block }: { block: NotionBlock }) {
     }
 
     case "bookmark": {
-      const data = (block as any).bookmark;
-      const url = data?.url;
+      const url = block.bookmark.url;
       if (!url) return null;
       return (
         <a href={url} target="_blank" rel="noopener noreferrer" className="my-4 flex items-center gap-2 p-3 border border-[var(--ed-border)] hover:border-[var(--ed-accent)] transition-colors group">

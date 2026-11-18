@@ -42,6 +42,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         padding: "0 80px",
       }}
     >
+      {/* eslint-disable-next-line @next/next/no-img-element -- ImageResponse (Satori) hanya mendukung <img> */}
       {cover && <img src={cover} alt="" height={470} style={{ height: 470, maxWidth: 360, objectFit: "contain", border: "1px solid #D8D6CE", marginRight: 64 }} />}
       <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
         <div style={{ fontSize: 24, letterSpacing: 6, color: "#8A6F3F" }}>FAQIH.ID / BUKU</div>

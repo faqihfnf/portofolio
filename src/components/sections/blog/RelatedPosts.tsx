@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { BlogPost } from "@/services/notionServices";
+import NotionImage from "@/components/ui/NotionImage";
 
 interface RelatedPostsProps {
   current: BlogPost;
@@ -35,7 +36,7 @@ export default function RelatedPosts({ current, posts, limit = 3 }: RelatedPosts
         {related.map((post) => (
           <li key={post.id}>
             <Link href={`/blog/${post.slug}`} className="group flex flex-col">
-              {post.cover && <img src={post.cover} alt={post.title} className="mb-4 aspect-[1200/630] w-full rounded-[2px] border border-[var(--ed-border)] object-cover" />}
+              {post.cover && <NotionImage src={post.cover} alt={post.title} className="mb-4 aspect-[1200/630] w-full rounded-lg border border-[var(--ed-border)] object-cover" />}
 
               {post.date && (
                 <span className="text-[11px] uppercase tracking-[0.18em] text-[var(--ed-text-muted)]">

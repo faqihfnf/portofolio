@@ -16,6 +16,7 @@ import PreviewGallery from "@/components/sections/books/PreviewGallery";
 import { AUTHOR_BIO_FULL, AUTHOR_BIO_SHORT, AUTHOR_NAME, BOOKS_URL, GENERAL_FAQ, isPlaceholder } from "@/data/books";
 import { categorySlug, getAuthorLine, getTranslatorName, hasArabicScript, isSamePerson, pickOtherBooks } from "@/lib/books";
 import { getBooks, getBookSections } from "@/services/books/bookServices";
+import NotionImage from "@/components/ui/NotionImage";
 
 // Mengikuti pola blog: render dinamis + cache in-memory 30 menit di service
 export const dynamic = "force-dynamic";
@@ -137,7 +138,7 @@ export default async function BookDetailPage({ params }: PageProps) {
         <header className={`mt-8 ${TWO_COLUMN}`}>
           <div className="mx-auto w-full max-w-[220px] md:mx-0 md:max-w-none">
             {book.cover ? (
-              <img src={book.cover} alt={`Sampul ${book.title}`} className="w-full rounded-lg border border-[var(--ed-border)]" />
+              <NotionImage src={book.cover} alt={`Sampul ${book.title}`} className="w-full rounded-lg border border-[var(--ed-border)]" />
             ) : (
               <div className="flex aspect-[5/7] items-center justify-center rounded-lg border border-[var(--ed-border)] bg-[var(--ed-bg-elevated)] p-6">
                 <span className="ed-serif text-center text-xl italic leading-snug text-[var(--ed-text-muted)]">{book.title}</span>

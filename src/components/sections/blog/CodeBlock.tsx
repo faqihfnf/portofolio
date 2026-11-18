@@ -4,12 +4,15 @@ import React, { useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Check, Clipboard } from "lucide-react";
+import type { CodeBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { plainTextOf } from "@/lib/notionBlocks";
 
-export default function CustomCodeBlock({ block }: { block: any }) {
+export default function CustomCodeBlock({ block }: { block: CodeBlockObjectResponse }) {
   const [copied, setCopied] = useState(false);
 
-  const language = block.code?.language || "plaintext";
-  const code = block.code?.rich_text?.map((t: any) => t.plain_text || "").join("") || "";
+  const language = block.code.language || "plaintext";
+  const code = plainTextOf(block.code.rich_text);
+  const caption = plainTextOf(block.code.caption);
 
   const handleCopy = async () => {
     try {
@@ -47,7 +50,7 @@ export default function CustomCodeBlock({ block }: { block: any }) {
         {code}
       </SyntaxHighlighter>
 
-      {block.code?.caption?.length > 0 && <p className="text-xs text-slate-500 mt-1 text-center">{block.code.caption.map((c: any) => c.plain_text).join("")}</p>}
+      {caption && <p className="text-xs text-slate-500 mt-1 text-center">{caption}</p>}
     </div>
   );
 }

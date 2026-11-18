@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import type { BookImage } from "@/services/books/types";
+import NotionImage from "@/components/ui/NotionImage";
 
 /** Galeri pratinjau halaman — klik gambar untuk memperbesar (lightbox sederhana) */
 export default function PreviewGallery({ images, title }: { images: BookImage[]; title: string }) {
@@ -41,7 +42,7 @@ export default function PreviewGallery({ images, title }: { images: BookImage[];
               aria-label={`Perbesar pratinjau halaman ${index + 1}`}
               className="group block w-full cursor-zoom-in overflow-hidden rounded-[2px] border border-[var(--ed-border)] bg-[var(--ed-bg-elevated)] transition-colors hover:border-[var(--ed-accent)]"
             >
-              <img src={image.url} alt={`Pratinjau halaman ${index + 1} — ${title}`} loading="lazy" className="aspect-[5/7] w-full object-cover object-top" />
+              <NotionImage src={image.url} alt={`Pratinjau halaman ${index + 1} — ${title}`} loading="lazy" className="aspect-[5/7] w-full object-cover object-top" />
             </button>
           </li>
         ))}
@@ -49,7 +50,7 @@ export default function PreviewGallery({ images, title }: { images: BookImage[];
 
       {isOpen && (
         <div role="dialog" aria-modal="true" aria-label={`Pratinjau halaman ${activeIndex + 1} dari ${total}`} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 md:p-10" onClick={() => setActiveIndex(null)}>
-          <img src={images[activeIndex].url} alt={`Pratinjau halaman ${activeIndex + 1} — ${title}`} className="max-h-full max-w-full rounded-[2px] object-contain" onClick={(e) => e.stopPropagation()} />
+          <NotionImage src={images[activeIndex].url} alt={`Pratinjau halaman ${activeIndex + 1} — ${title}`} className="max-h-full max-w-full rounded-[2px] object-contain" onClick={(e) => e.stopPropagation()} />
 
           <button type="button" autoFocus onClick={() => setActiveIndex(null)} aria-label="Tutup pratinjau" className="absolute right-3 top-3 cursor-pointer p-3 text-white/70 transition-colors hover:text-white">
             <X size={22} strokeWidth={1.5} />

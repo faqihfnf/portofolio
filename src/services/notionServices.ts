@@ -1,5 +1,7 @@
+import { isFullBlock } from "@notionhq/client";
+import type { PageObjectResponse, QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpoints";
+import type { NotionBlock } from "@/lib/notionBlocks";
 import { notion } from "../lib/notion";
-import { PageObjectResponse, QueryDatabaseResponse } from "@notionhq/client/build/src/api-endpoints";
 
 // ============================================================
 // Types
@@ -30,13 +32,7 @@ export interface Project {
   order: number | null;
 }
 
-export interface NotionBlock {
-  id: string;
-  type: string;
-  has_children: boolean;
-  children?: NotionBlock[];
-  [key: string]: any;
-}
+export type { NotionBlock } from "@/lib/notionBlocks";
 
 // ============================================================
 // Simple in-memory cache (5 menit)
@@ -106,7 +102,7 @@ export async function getData(): Promise<BlogPost[]> {
     if (createdProp?.type === "date" && createdProp.date?.start) {
       createdAt = createdProp.date.start;
     } else {
-      createdAt = (page as any).created_time ?? null;
+      createdAt = page.created_time ?? null;
     }
 
     let updatedAt: string | null = null;
@@ -261,7 +257,8 @@ async function fetchBlocksRecursive(blockId: string): Promise<NotionBlock[]> {
       ...(cursor ? { start_cursor: cursor } : {}),
     });
 
-    for (const block of response.results as NotionBlock[]) {
+    // Block parsial (tanpa isi) tidak bisa dirender, jadi dilewati
+    for (const block of response.results.filter(isFullBlock)) {
       const notionBlock: NotionBlock = { ...block };
       if (block.has_children) {
         notionBlock.children = await fetchBlocksRecursive(block.id);

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getAuthorLine } from "@/lib/books";
 import type { Book } from "@/services/books/types";
+import NotionImage from "@/components/ui/NotionImage";
 
 interface BookCardProps {
   book: Book;
@@ -13,7 +14,7 @@ export default function BookCard({ book, headingAs: Heading = "h2" }: BookCardPr
     <Link href={`/books/${book.slug}`} data-no-justify className="group flex flex-col">
       <div className="aspect-[5/7] overflow-hidden rounded-lg border border-[var(--ed-border)] bg-[var(--ed-bg-elevated)]">
         {book.cover ? (
-          <img src={book.cover} alt={`Sampul ${book.title}`} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]" />
+          <NotionImage src={book.cover} alt={`Sampul ${book.title}`} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]" />
         ) : (
           // Belum ada cover — judul sebagai pengganti
           <div className="flex h-full items-center justify-center p-5">

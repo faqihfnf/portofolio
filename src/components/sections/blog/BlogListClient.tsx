@@ -10,6 +10,7 @@ import SectionHeader from "@/components/editorial/SectionHeader";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 import { fraunces, inter } from "@/components/editorial/fonts";
 import { EditorialButton } from "@/components/editorial/EditorialButton";
+import NotionImage from "@/components/ui/NotionImage";
 
 interface BlogListClientProps {
   posts: BlogPost[];
@@ -162,7 +163,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                 {/* Thumbnail — kanan seperti sebelumnya */}
                 {post.cover && (
                   <div className="flex-shrink-0 sm:h-[120px] sm:w-[180px]">
-                    <img src={post.cover} alt={post.title} className="h-44 w-full rounded-[2px] border border-[var(--ed-border)] object-cover sm:h-full" />
+                    <NotionImage src={post.cover} alt={post.title} className="h-44 w-full rounded-lg border border-[var(--ed-border)] object-cover sm:h-full" />
                   </div>
                 )}
 

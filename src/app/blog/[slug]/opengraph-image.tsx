@@ -29,7 +29,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const cover = post?.cover ? await loadCover(post.cover) : null;
 
   if (cover) {
-    return new ImageResponse(<img src={cover} width={size.width} height={size.height} style={{ width: "100%", height: "100%", objectFit: "cover" }} />, { ...size });
+    // eslint-disable-next-line @next/next/no-img-element -- ImageResponse (Satori) hanya mendukung <img>
+    return new ImageResponse(<img src={cover} alt="" width={size.width} height={size.height} style={{ width: "100%", height: "100%", objectFit: "cover" }} />, { ...size });
   }
 
   // Fallback tanpa cover — kartu editorial berisi judul artikel

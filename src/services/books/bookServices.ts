@@ -2,7 +2,8 @@ import "server-only";
 
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { notion } from "@/lib/notion";
-import { getCache, getPageBlocks, setCache, NotionBlock } from "@/services/notionServices";
+import { blockRichText, plainTextOf, type NotionBlock } from "@/lib/notionBlocks";
+import { getCache, getPageBlocks, setCache } from "@/services/notionServices";
 import { BOOK_PROPS, BOOK_SECTION_HEADINGS, BOOK_STATUS, BOOK_TYPE } from "./properties";
 import type { Book, BookFaqItem, BookImage, BookSections } from "./types";
 
@@ -165,11 +166,7 @@ export async function getInternalBookBySlug(slug: string): Promise<InternalBook 
 // ============================================================
 type SectionKey = keyof typeof BOOK_SECTION_HEADINGS;
 
-const plainText = (block: NotionBlock): string =>
-  (block[block.type]?.rich_text ?? [])
-    .map((t: { plain_text?: string }) => t.plain_text ?? "")
-    .join("")
-    .trim();
+const plainText = (block: NotionBlock): string => plainTextOf(blockRichText(block)).trim();
 
 const isEmptyParagraph = (block: NotionBlock) => block.type === "paragraph" && plainText(block) === "" && !block.children?.length;
 

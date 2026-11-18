@@ -4,6 +4,7 @@ import Link from "next/link";
 import { fraunces, inter } from "@/components/editorial/fonts";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import NotionImage from "@/components/ui/NotionImage";
 
 export const dynamic = "force-dynamic";
 
@@ -92,7 +93,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         )}
 
         {/* Cover */}
-        {project.cover && <img src={project.cover} alt={project.title} className="mt-10 w-full rounded-[2px] border border-[var(--ed-border)] object-cover" />}
+        {project.cover && <NotionImage src={project.cover} alt={project.title} className="mt-10 w-full rounded-[2px] border border-[var(--ed-border)] object-cover" />}
 
         {/* Notion Content */}
         <div className={project.cover ? "mt-10" : "mt-2"}>{blocks.length > 0 ? <NotionBlockRenderer blocks={blocks} /> : <p className="py-10 text-center text-[var(--ed-text-muted)]">Belum ada konten detail untuk project ini.</p>}</div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import { certificates, type CertificateItem } from "@/data/certificates";
 import { useTranslation } from "react-i18next";
@@ -150,7 +151,7 @@ export default function CertificatesClient() {
                   </div>
                 </>
               ) : (
-                <img src={selectedCert.link} alt={selectedCert.title} className="h-auto w-full rounded-md" />
+                <Image src={selectedCert.link} alt={selectedCert.title} width={1600} height={1131} sizes="(min-width: 768px) 768px, 100vw" className="h-auto w-full rounded-md" />
               )}
             </motion.div>
           </motion.div>

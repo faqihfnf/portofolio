@@ -28,7 +28,8 @@ export default async function Image() {
         <div style={{ fontSize: 36, color: "#4A4A46", lineHeight: 1.3 }}>Certified HR Manager (BNSP) & Software Engineer</div>
         <div style={{ fontSize: 24, color: "#8B897F", marginTop: 18 }}>BNSP Certified HR Manager · 9+ years experience</div>
       </div>
-      <img src={photoSrc} width={340} height={340} style={{ borderRadius: "50%", objectFit: "cover", border: "6px solid #D8D6CE" }} />
+      {/* eslint-disable-next-line @next/next/no-img-element -- ImageResponse (Satori) hanya mendukung <img> */}
+      <img src={photoSrc} alt="" width={340} height={340} style={{ borderRadius: "50%", objectFit: "cover", border: "6px solid #D8D6CE" }} />
     </div>,
     { ...size },
   );

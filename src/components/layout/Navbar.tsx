@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -11,14 +11,18 @@ import SwitchTranslation from "@/components/layout/SwitchTranslation";
 import { fraunces, inter } from "@/components/editorial/fonts";
 import { useTranslation } from "react-i18next";
 
+const subscribeNoop = () => () => {};
+
 export default function Navbar() {
   const { t } = useTranslation();
   const pathname = usePathname();
   const { resolvedTheme, setTheme } = useTheme();
-  // Tema baru diketahui di client — sebelum mount, ikon dirender kosong agar tidak hydration mismatch
-  const [mounted, setMounted] = useState(false);
+  // Tema baru diketahui di client — sebelum hidrasi selesai, ikon dirender kosong agar tidak hydration mismatch
+  const mounted = useSyncExternalStore(subscribeNoop, () => true, () => false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // Menu mobile menyimpan path tempat ia dibuka. Pindah halaman otomatis menutupnya tanpa effect.
+  const [menuOpenedOn, setMenuOpenedOn] = useState<string | null>(null);
+  const isMobileMenuOpen = menuOpenedOn === pathname;
 
   const navItems = [
     { name: t("navbar.nav-item-1"), link: "/" },
@@ -32,8 +36,6 @@ export default function Navbar() {
     { name: t("navbar.nav-item-5"), link: "/contact" },
   ];
 
-  useEffect(() => setMounted(true), []);
-
   const toggleTheme = () => setTheme(resolvedTheme === "dark" ? "light" : "dark");
   const themeIcon = (size: number) => (!mounted ? <span className="block" style={{ width: size, height: size }} /> : resolvedTheme === "dark" ? <Moon size={size} /> : <Sun size={size} />);
 
@@ -43,10 +45,6 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
 
   return (
     <div className={`${fraunces.variable} ${inter.variable} editorial`}>
@@ -82,7 +80,7 @@ export default function Navbar() {
               {themeIcon(17)}
             </button>
             <SwitchTranslation />
-            <button onClick={() => setIsMobileMenuOpen((prev) => !prev)} aria-label="Toggle menu" aria-expanded={isMobileMenuOpen} aria-controls="mobile-menu" className="cursor-pointer text-[var(--ed-text-secondary)] transition-colors hover:text-[var(--ed-accent)]">
+            <button onClick={() => setMenuOpenedOn(isMobileMenuOpen ? null : pathname)} aria-label="Toggle menu" aria-expanded={isMobileMenuOpen} aria-controls="mobile-menu" className="cursor-pointer text-[var(--ed-text-secondary)] transition-colors hover:text-[var(--ed-accent)]">
               {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
@@ -97,7 +95,7 @@ export default function Navbar() {
                   <Link
                     key={item.link}
                     href={item.link}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={() => setMenuOpenedOn(null)}
                     className={`border-b border-[var(--ed-border)] py-3 text-[12px] uppercase tracking-[0.18em] transition-colors last:border-b-0 ${
                       pathname === item.link ? "text-[var(--ed-accent)]" : "text-[var(--ed-text-secondary)] hover:text-[var(--ed-accent)]"
                     }`}

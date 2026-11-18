@@ -1,7 +1,7 @@
 import { getData, getPageBlocks } from "@/services/notionServices";
 import TableOfContents from "../../../components/sections/blog/TableOfContents";
 import Link from "next/link";
-import { NotionBlock } from "@/services/notionServices";
+import { blockRichText, plainTextOf, type NotionBlock } from "@/lib/notionBlocks";
 import NotionBlockRenderer from "../../../components/sections/blog/NotionBlockRenderer";
 import RelatedPosts from "../../../components/sections/blog/RelatedPosts";
 import { Metadata } from "next";
@@ -9,6 +9,7 @@ import { fraunces, inter } from "@/components/editorial/fonts";
 import { ArrowLeft } from "lucide-react";
 import ShareMenu from "@/components/editorial/ShareMenu";
 import { notFound } from "next/navigation";
+import NotionImage from "@/components/ui/NotionImage";
 
 export const dynamic = "force-dynamic";
 
@@ -58,8 +59,7 @@ function extractHeadings(blocks: NotionBlock[]) {
   return blocks
     .filter((b) => ["heading_1", "heading_2", "heading_3"].includes(b.type))
     .map((b) => {
-      const data = (b as any)[b.type];
-      const title = data?.rich_text?.map((t: any) => t.plain_text).join("") || "";
+      const title = plainTextOf(blockRichText(b));
       const level = b.type === "heading_1" ? 1 : b.type === "heading_2" ? 2 : 3;
       return {
         id: b.id.replace(/-/g, ""),
@@ -108,7 +108,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
         </div>
 
         {/* Cover image */}
-        {page.cover && <img src={page.cover} alt={page.title} className="mt-8 aspect-[1200/630] w-full rounded-[2px] border border-[var(--ed-border)] object-cover" />}
+        {page.cover && <NotionImage src={page.cover} alt={page.title} className="mt-8 aspect-[1200/630] w-full rounded-lg border border-[var(--ed-border)] object-cover" />}
 
         <div className="mt-8  border-[var(--ed-border)] pt-10">
           {/* Mobile TOC Dropdown */}
