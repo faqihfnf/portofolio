@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     title: "Buku dan Ebook Gratis — Faqih Nur Fahmi",
     description,
     // openGraph di sini menimpa milik root, jadi gambar dari src/app/opengraph-image.tsx harus disebut ulang
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Faqih Nur Fahmi — HR Manager and Full Stack Developer" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Faqih Nur Fahmi — HR Manager and Software Engineer" }],
   },
   twitter: {
     card: "summary_large_image",

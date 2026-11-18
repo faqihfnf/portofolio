@@ -14,13 +14,13 @@
     "eyebrow": "Faqih Nur Fahmi / 2026 /",
     "cv": "Unduh CV",
     "role": "Certified HR Manager",
-    "role-secondary": "Full Stack Developer",
+    "role-secondary": "Software Engineer",
     "title-first": "Menghubungkan",
     "title-first-emphasis": "manusia",
     "title-connector": "dan",
     "title-second-emphasis": "sistem",
     "title-ending": ".",
-    "description": "Saya adalah HR Manager dengan pengalaman lebih dari 9 tahun dalam membantu organisasi mengembangkan SDM, proses kerja, dan sistem di tempat kerja. Sebagai HR Manager bersertifikasi BNSP dengan kemampuan full-stack development, saya menghubungkan kebutuhan organisasi dengan solusi digital yang praktis.",
+    "description": "Saya adalah HR Manager dengan pengalaman lebih dari 9 tahun dalam membantu organisasi mengembangkan SDM, proses kerja, dan sistem di tempat kerja. Sebagai HR Manager bersertifikasi BNSP dengan kemampuan software engineering, saya menghubungkan kebutuhan organisasi dengan solusi digital yang praktis.",
     "based": "Domisili di",
     "stats": {
       "years": "Tahun di HR",
@@ -48,8 +48,8 @@
         "desc": "Menghubungkan kebutuhan organisasi dengan solusi digital praktis yang menyederhanakan alur kerja, meningkatkan visibilitas, dan mendukung pengambilan keputusan yang lebih baik."
       },
       "4": {
-        "title": "Full Stack Development",
-        "desc": "Membangun aplikasi web dan sistem internal yang menerjemahkan kebutuhan organisasi nyata menjadi sistem digital yang dapat digunakan."
+        "title": "Software Engineering",
+        "desc": "Membangun produk software, aplikasi web, dan sistem internal yang menerjemahkan kebutuhan organisasi nyata menjadi sistem digital yang dapat digunakan."
       }
     }
   },
@@ -64,7 +64,7 @@
     "title": "Manusia, Proses &",
     "title-emphasis": "Sistem",
     "description": "Gambaran lebih dekat tentang pengalaman dan perspektif profesional saya.",
-    "content": "Sebagai HR Manager dengan pengalaman lebih dari sembilan tahun, saya bekerja dalam bidang manajemen SDM, pengembangan organisasi, dan sistem kerja. Saya terlibat dalam penyusunan kebijakan, peningkatan cara kerja, pengembangan karyawan, serta penyelarasan praktik SDM dengan tujuan organisasi. Kemampuan full-stack development membantu saya menghubungkan tantangan organisasi dengan solusi teknologi yang praktis dan dapat digunakan.",
+    "content": "Sebagai HR Manager dengan pengalaman lebih dari sembilan tahun, saya bekerja dalam bidang manajemen SDM, pengembangan organisasi, dan sistem kerja. Saya terlibat dalam penyusunan kebijakan, peningkatan cara kerja, pengembangan karyawan, serta penyelarasan praktik SDM dengan tujuan organisasi. Kemampuan software engineering membantu saya menghubungkan tantangan organisasi dengan solusi teknologi yang praktis dan dapat digunakan.",
     "read-more": "Baca profil lengkap saya",
     "quote-1": "Memahami",
     "quote-people": "Manusia",
@@ -121,7 +121,7 @@
       },
       "2": {
         "tag": "Freelance / Proyek",
-        "title": "Pengembangan Web",
+        "title": "Pengembangan Software",
         "desc": "Aplikasi web, tools internal, otomasi, dan dashboard yang dibangun dengan Next.js, React, dan TypeScript."
       },
       "3": {
@@ -134,7 +134,7 @@
   },
   "experience": {
     "title": "Pengalaman Saya",
-    "description": "Perjalanan profesional saya dalam bidang HR dan pengembangan web.",
+    "description": "Perjalanan profesional saya dalam bidang HR dan software engineering.",
     "hr": {
       "Job-0": "Memimpin proses transformasi HR mulai dari rekrutmen, onboarding, manajemen kinerja, struktur upah hingga pengembangan karyawan untuk meningkatkan efisiensi dan pengalaman karyawan.",
       "Job-1": "Memimpin proses standarisasi dan digitalisasi proses HR mulai dari rekrutmen, onboarding, manajemen kinerja, hingga pengembangan karyawan untuk meningkatkan efisiensi dan pengalaman karyawan.",

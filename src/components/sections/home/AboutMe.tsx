@@ -28,7 +28,7 @@ export default function AboutMe() {
           <div className="grid grid-cols-1 gap-10 md:grid-cols-[230px_1fr] md:gap-14">
             <div className="flex flex-col">
               <div className="relative mx-auto aspect-[1302/1208] w-full max-w-[400px] flex-1 overflow-hidden rounded-lg md:mx-0 md:aspect-auto md:max-w-none">
-                <Image src="/profil.png" alt="Faqih Nur Fahmi, HR Manager and Full Stack Developer" fill sizes="(min-width: 768px) 230px, 400px" className="object-cover" />
+                <Image src="/profil.png" alt="Faqih Nur Fahmi, HR Manager and Software Engineer" fill sizes="(min-width: 768px) 230px, 400px" className="object-cover" />
               </div>
             </div>
 

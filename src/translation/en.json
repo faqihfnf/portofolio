@@ -14,13 +14,13 @@
     "eyebrow": "Faqih Nur Fahmi / 2026 /",
     "cv": "Download CV",
     "role": "Certified HR Manager",
-    "role-secondary": "Full Stack Developer",
+    "role-secondary": "Software Engineer",
     "title-first": "Connecting",
     "title-first-emphasis": "people",
     "title-connector": "and",
     "title-second-emphasis": "systems",
     "title-ending": ".",
-    "description": "I’m an HR Manager with 9+ years of experience helping organizations improve their people, processes, and workplace systems. As a BNSP Certified HR Manager with full-stack development skills, I connect organizational needs with practical digital solutions.",
+    "description": "I’m an HR Manager with 9+ years of experience helping organizations improve their people, processes, and workplace systems. As a BNSP Certified HR Manager with software engineering skills, I connect organizational needs with practical digital solutions.",
     "based": "Based in",
     "stats": {
       "years": "Years in HR",
@@ -48,8 +48,8 @@
         "desc": "Connecting organizational needs with practical digital solutions that simplify workflows, improve visibility, and support better decisions."
       },
       "4": {
-        "title": "Full Stack Development",
-        "desc": "Building practical web applications and internal tools that translate real organizational needs into usable digital systems."
+        "title": "Software Engineering",
+        "desc": "Building practical software products, web applications, and internal tools that translate real organizational needs into usable digital systems."
       }
     }
   },
@@ -64,7 +64,7 @@
     "title": "People, Process &",
     "title-emphasis": "System",
     "description": "A closer look at my professional experience and perspective.",
-    "content": "As an HR Manager with more than nine years of experience, I work across people management, organizational development, and workplace systems. I am involved in shaping policies, improving ways of working, supporting employee growth, and aligning people practices with organizational goals. My full-stack development skills help me connect organizational challenges with practical and usable technology solutions.",
+    "content": "As an HR Manager with more than nine years of experience, I work across people management, organizational development, and workplace systems. I am involved in shaping policies, improving ways of working, supporting employee growth, and aligning people practices with organizational goals. My software engineering skills help me connect organizational challenges with practical and usable technology solutions.",
     "read-more": "Read my full profile",
     "quote-1": "Understand the",
     "quote-people": "People",
@@ -121,7 +121,7 @@
       },
       "2": {
         "tag": "Freelance / Project",
-        "title": "Web Development",
+        "title": "Software Development",
         "desc": "Web applications, internal tools, automation, and dashboards built with Next.js, React, and TypeScript."
       },
       "3": {
@@ -135,7 +135,7 @@
 
   "experience": {
     "title": "My Experience",
-    "description": "My professional journey in HR and web development.",
+    "description": "My professional journey in HR and software engineering.",
     "hr": {
       "Job-0": "Leading the transformation of HR processes—from recruitment, onboarding, performance management, salary structures and employee development—to enhance overall efficiency and employee experience.",
       "Job-1": "Leading the standardization and digitalization of HR processes—from recruitment, onboarding, and performance management to employee development—enhancing overall efficiency and the employee experience.",

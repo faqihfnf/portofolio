@@ -16,7 +16,7 @@ const poppins = Poppins({ subsets: ["latin"], weight: "400" });
 export const metadata: Metadata = {
   metadataBase: new URL("https://faqih.id"),
   title: {
-    default: "Faqih Nur Fahmi — Certified HR Manager (BNSP) & Full Stack Developer",
+    default: "Faqih Nur Fahmi — Certified HR Manager (BNSP) & Software Engineer",
     template: "%s | Faqih Nur Fahmi",
   },
   description: "Faqih Nur Fahmi is an HR Manager and BNSP Certified HR Manager with 9+ years of experience in people management, organizational development, and practical digital solutions.",
@@ -37,12 +37,12 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Faqih Nur Fahmi",
-    title: "Faqih Nur Fahmi — Certified HR Manager (BNSP) & Full Stack Developer",
+    title: "Faqih Nur Fahmi — Certified HR Manager (BNSP) & Software Engineer",
     description: "HR Manager and BNSP Certified HR Manager combining people, organizational processes, and technology.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Faqih Nur Fahmi — Certified HR Manager (BNSP) & Full Stack Developer",
+    title: "Faqih Nur Fahmi — Certified HR Manager (BNSP) & Software Engineer",
     description: "HR Manager and BNSP Certified HR Manager combining people, organizational processes, and technology.",
   },
   icons: {
@@ -56,11 +56,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     "@type": "Person",
     name: "Faqih Nur Fahmi",
     jobTitle: "HR Manager",
-    description: "HR Manager and BNSP Certified HR Manager with full-stack development skills.",
+    description: "HR Manager and BNSP Certified HR Manager with software engineering skills.",
     url: "https://faqih.id",
     image: "https://faqih.id/profil.png",
     sameAs: ["https://github.com/faqihfnf", "https://www.linkedin.com/in/faqih-nur-fahmi-b51bb1ab/", "https://www.instagram.com/faqih.me", "https://www.youtube.com/@marifahid"],
-    knowsAbout: ["Human Resource Management", "People Management", "Organizational Development", "Digital Transformation", "Full Stack Development"],
+    knowsAbout: ["Human Resource Management", "People Management", "Organizational Development", "Digital Transformation", "Software Engineering"],
     hasCredential: {
       "@type": "EducationalOccupationalCredential",
       name: "Certified HR Manager",

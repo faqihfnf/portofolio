@@ -3,7 +3,7 @@ import CertificatesClient from "@/components/sections/certificates/CertificatesC
 
 export const metadata: Metadata = {
   title: "HR Manager Certifications",
-  description: "Professional certifications held by Faqih Nur Fahmi, including BNSP HR Manager certification, data analytics, information security, and full-stack development.",
+  description: "Professional certifications held by Faqih Nur Fahmi, including BNSP HR Manager certification, data analytics, information security, and software development.",
   alternates: { canonical: "/certificates" },
 };
 
