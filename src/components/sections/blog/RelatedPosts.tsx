@@ -36,7 +36,7 @@ export default function RelatedPosts({ current, posts, limit = 3 }: RelatedPosts
         {related.map((post) => (
           <li key={post.id}>
             <Link href={`/blog/${post.slug}`} className="group flex flex-col">
-              {post.cover && <NotionImage src={post.cover} alt={post.title} className="mb-4 aspect-[1200/630] w-full rounded-lg border border-[var(--ed-border)] object-cover" />}
+              {post.cover && <NotionImage src={post.cover} alt={post.title} width={1200} height={630} sizes="(min-width: 1024px) 300px, 100vw" className="mb-4 aspect-[1200/630] w-full rounded-lg border border-[var(--ed-border)] object-cover" />}
 
               {post.date && (
                 <span className="text-[11px] uppercase tracking-[0.18em] text-[var(--ed-text-muted)]">

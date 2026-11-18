@@ -1,6 +1,5 @@
 import "server-only";
 
-import { after } from "next/server";
 import { AwsClient } from "aws4fetch";
 
 // ============================================================
@@ -11,9 +10,10 @@ import { AwsClient } from "aws4fetch";
 //   1. Saat data Notion diambil, setiap URL file Notion diberi kunci tetap: notion/{ID-file}/{nama-file}.
 //      ID file sama untuk file yang sama, dan berubah kalau gambar diganti di Notion.
 //   2. Sudah ada di R2 → URL diganti ke CDN.
-//   3. Belum ada → URL Notion tetap dipakai untuk kunjungan ini, dan gambar disalin ke R2 di latar
-//      belakang (after(), setelah respons terkirim). Kunjungan berikutnya sudah memakai CDN.
-// Kalau R2 belum dikonfigurasi atau ada error, URL Notion dipakai apa adanya — gambar tidak pernah rusak.
+//   3. Belum ada → gambar disalin ke R2 saat itu juga, lalu URL CDN yang dipakai. Halaman Notion memakai
+//      ISR (dibuat ulang di latar belakang), jadi waktu salin tidak dirasakan pengunjung, dan HTML yang
+//      di-cache selalu berisi URL permanen — bukan URL Notion yang kedaluwarsa.
+// Kalau R2 belum dikonfigurasi atau penyalinan gagal, URL Notion dipakai apa adanya — gambar tidak rusak.
 // ============================================================
 
 const MAX_BYTES = 20 * 1024 * 1024;
@@ -89,7 +89,8 @@ async function existsInR2(cfg: R2Config, key: string): Promise<boolean> {
 }
 
 async function copyToR2(cfg: R2Config, sourceUrl: string, key: string): Promise<void> {
-  const source = await fetch(sourceUrl, { cache: "no-store", signal: AbortSignal.timeout(COPY_TIMEOUT_MS) });
+  // Tanpa cache: "no-store" — opsi itu membuat halaman ISR berubah menjadi dinamis
+  const source = await fetch(sourceUrl, { signal: AbortSignal.timeout(COPY_TIMEOUT_MS) });
   if (!source.ok) throw new Error(`Gagal mengunduh file Notion (${source.status})`);
 
   const body = await source.arrayBuffer();
@@ -116,28 +117,21 @@ async function copyToR2(cfg: R2Config, sourceUrl: string, key: string): Promise<
   knownInR2.add(key);
 }
 
-function scheduleCopy(cfg: R2Config, sourceUrl: string, key: string) {
-  if (copying.has(key)) return;
-  const task = () => {
-    const job = copyToR2(cfg, sourceUrl, key)
+/** Salin sekali saja per kunci, walau diminta beberapa halaman bersamaan */
+function copyOnce(cfg: R2Config, sourceUrl: string, key: string): Promise<void> {
+  let job = copying.get(key);
+  if (!job) {
+    job = copyToR2(cfg, sourceUrl, key)
       .then(() => console.info(`[notion-image] Tersalin ke R2: ${key}`))
-      .catch((error) => console.error(`[notion-image] Gagal menyalin ${key}:`, error))
       .finally(() => copying.delete(key));
     copying.set(key, job);
-    return job;
-  };
-  try {
-    // Dijalankan setelah respons terkirim, jadi pengunjung tidak ikut menunggu
-    after(task);
-  } catch {
-    // Di luar konteks request (mis. skrip) — jalankan langsung tanpa ditunggu
-    void task();
   }
+  return job;
 }
 
 /**
- * Ganti URL file Notion dengan URL CDN bila sudah ada di R2; bila belum, jadwalkan penyalinan
- * dan kembalikan URL aslinya. URL selain file Notion dikembalikan apa adanya.
+ * Ganti URL file Notion dengan URL CDN. Gambar yang belum ada di R2 disalin dulu.
+ * URL selain file Notion, atau saat terjadi error, dikembalikan apa adanya.
  */
 export async function mirrorNotionUrl(url: string): Promise<string> {
   const cfg = getConfig();
@@ -158,8 +152,13 @@ export async function mirrorNotionUrl(url: string): Promise<string> {
     return url;
   }
 
-  scheduleCopy(cfg, url, key);
-  return url;
+  try {
+    await copyOnce(cfg, url, key);
+    return cdnUrl;
+  } catch (error) {
+    console.error(`[notion-image] Gagal menyalin ${key}:`, error);
+    return url;
+  }
 }
 
 /** mirrorNotionUrl untuk banyak URL sekaligus (diperiksa paralel) */

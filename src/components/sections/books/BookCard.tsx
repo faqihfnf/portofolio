@@ -24,7 +24,7 @@ export default function BookCard({ book, headingAs: Heading = "h2" }: BookCardPr
     <Link href={`/books/${book.slug}`} data-no-justify className="group flex flex-col">
       <div className="aspect-[5/7] overflow-hidden rounded-lg border border-[var(--ed-border)] bg-[var(--ed-bg-elevated)]">
         {book.cover ? (
-          <NotionImage src={book.cover} alt={`Sampul ${book.title}`} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]" />
+          <NotionImage src={book.cover} alt={`Sampul ${book.title}`} width={500} height={700} sizes="(min-width: 1024px) 220px, (min-width: 640px) 33vw, 50vw" loading="lazy" className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]" />
         ) : (
           // Belum ada cover — judul sebagai pengganti
           <div className="flex h-full items-center justify-center p-5">

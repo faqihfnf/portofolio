@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSyncExternalStore } from "react";
 import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 import SectionHeader from "@/components/editorial/SectionHeader";
@@ -11,12 +11,26 @@ import type { Book } from "@/services/books/types";
 import BookCard from "./BookCard";
 
 const CATEGORY_PARAM = "kategori";
+const CATEGORY_EVENT = "book-category-change";
+
+// Kategori aktif dibaca langsung dari URL browser (?kategori=), bukan lewat useSearchParams: halaman ini
+// ISR, dan useSearchParams di halaman statis mewajibkan <Suspense> yang menunda hidrasi daftar buku.
+// Server selalu merender "Semua"; filter dari URL diterapkan setelah hidrasi tanpa hydration mismatch.
+const subscribeCategory = (onChange: () => void) => {
+  window.addEventListener("popstate", onChange);
+  window.addEventListener(CATEGORY_EVENT, onChange);
+  return () => {
+    window.removeEventListener("popstate", onChange);
+    window.removeEventListener(CATEGORY_EVENT, onChange);
+  };
+};
+const readCategory = () => new URLSearchParams(window.location.search).get(CATEGORY_PARAM) ?? "";
+const readCategoryOnServer = () => "";
 
 export default function BookListClient({ books }: { books: Book[] }) {
   const { t } = useTranslation();
   // Filter disimpan di URL (?kategori=agama) supaya bisa dibagikan
-  const searchParams = useSearchParams();
-  const activeSlug = searchParams.get(CATEGORY_PARAM) ?? "";
+  const activeSlug = useSyncExternalStore(subscribeCategory, readCategory, readCategoryOnServer);
 
   const counts = new Map<string, number>();
   books.forEach((book) => book.category && counts.set(book.category, (counts.get(book.category) ?? 0) + 1));
@@ -29,12 +43,13 @@ export default function BookListClient({ books }: { books: Book[] }) {
   const filteredBooks = activeCategory ? books.filter((book) => book.category === activeCategory.name) : books;
 
   const selectCategory = (slug: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(window.location.search);
     if (slug) params.set(CATEGORY_PARAM, slug);
     else params.delete(CATEGORY_PARAM);
     const query = params.toString();
-    // replaceState tersinkron dengan useSearchParams, tanpa memuat ulang data dari server
+    // replaceState tanpa memuat ulang data dari server, lalu beri tahu subscribeCategory
     window.history.replaceState(null, "", query ? `?${query}` : window.location.pathname);
+    window.dispatchEvent(new Event(CATEGORY_EVENT));
   };
 
   const tabs = [{ name: t("books.all"), slug: "", count: books.length }, ...categories];

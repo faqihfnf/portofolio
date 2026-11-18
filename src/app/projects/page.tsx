@@ -2,7 +2,9 @@ import { getProjects } from "@/services/notionServices";
 import ProjectsClient from "@/components/sections/projects/ProjectClient";
 import { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+// ISR: halaman disajikan dari cache dan dibuat ulang di latar belakang paling sering tiap 5 menit.
+// Aman karena URL gambar sudah permanen (disalin ke R2), tidak lagi URL Notion yang kedaluwarsa ±1 jam.
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Proyek Teknologi HR dan Digital",

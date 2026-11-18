@@ -6,7 +6,21 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import NotionImage from "@/components/ui/NotionImage";
 
-export const dynamic = "force-dynamic";
+// ISR: halaman disajikan dari cache dan dibuat ulang di latar belakang paling sering tiap 5 menit.
+// Aman karena URL gambar sudah permanen (disalin ke R2), tidak lagi URL Notion yang kedaluwarsa ±1 jam.
+export const revalidate = 300;
+
+// Semua proyek dibuat saat build. Kalau Notion gagal diakses saat build, daftar dikosongkan
+// supaya deploy tidak gagal — halaman lalu dibuat saat pertama dibuka (dynamicParams default true).
+export async function generateStaticParams() {
+  try {
+    const items = await getProjects();
+    return items.filter((item) => item.slug).map((item) => ({ slug: item.slug as string }));
+  } catch (error) {
+    console.error("[generateStaticParams] Gagal mengambil daftar proyek dari Notion:", error);
+    return [];
+  }
+}
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -93,7 +107,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         )}
 
         {/* Cover */}
-        {project.cover && <NotionImage src={project.cover} alt={project.title} className="mt-10 w-full rounded-[2px] border border-[var(--ed-border)] object-cover" />}
+        {project.cover && <NotionImage src={project.cover} alt={project.title} width={1200} height={630} sizes="(min-width: 1024px) 944px, 100vw" preload className="mt-10 h-auto w-full rounded-[2px] border border-[var(--ed-border)] object-cover" />}
 
         {/* Notion Content */}
         <div className={project.cover ? "mt-10" : "mt-2"}>{blocks.length > 0 ? <NotionBlockRenderer blocks={blocks} /> : <p className="py-10 text-center text-[var(--ed-text-muted)]">Belum ada konten detail untuk project ini.</p>}</div>

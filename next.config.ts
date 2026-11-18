@@ -13,9 +13,21 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
 ];
 
+// CDN gambar Notion yang sudah disalin ke R2 (mis. https://cdn.faqih.id). Kosong → next/image tidak dipakai
+// untuk gambar Notion dan NotionImage kembali ke <img> biasa.
+const imageCdn = process.env.R2_PUBLIC_URL?.replace(/\/+$/, "") ?? "";
+
 const nextConfig: NextConfig = {
   experimental: {
     agentUpgrade: "security",
+  },
+  // Diteruskan ke NotionImage (juga di komponen client) untuk mengenali URL CDN
+  env: {
+    NEXT_PUBLIC_IMAGE_CDN: imageCdn,
+  },
+  images: {
+    // Hanya gambar Notion di CDN sendiri yang boleh dioptimasi next/image
+    remotePatterns: imageCdn ? [new URL(`${imageCdn}/notion/**`)] : [],
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

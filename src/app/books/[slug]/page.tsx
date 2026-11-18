@@ -18,8 +18,21 @@ import { categorySlug, getAuthorLine, getTranslatorName, hasArabicScript, isSame
 import { getBooks, getBookSections } from "@/services/books/bookServices";
 import NotionImage from "@/components/ui/NotionImage";
 
-// Mengikuti pola blog: render dinamis + cache in-memory 30 menit di service
-export const dynamic = "force-dynamic";
+// ISR: halaman disajikan dari cache dan dibuat ulang di latar belakang paling sering tiap 5 menit.
+// Aman karena URL gambar sudah permanen (disalin ke R2), tidak lagi URL Notion yang kedaluwarsa ±1 jam.
+export const revalidate = 300;
+
+// Semua buku dibuat saat build. Kalau Notion gagal diakses saat build, daftar dikosongkan
+// supaya deploy tidak gagal — halaman lalu dibuat saat pertama dibuka (dynamicParams default true).
+export async function generateStaticParams() {
+  try {
+    const items = await getBooks();
+    return items.filter((item) => item.slug).map((item) => ({ slug: item.slug as string }));
+  } catch (error) {
+    console.error("[generateStaticParams] Gagal mengambil daftar buku dari Notion:", error);
+    return [];
+  }
+}
 
 const BOTTOM_FORM_ID = "unduh";
 
@@ -138,7 +151,7 @@ export default async function BookDetailPage({ params }: PageProps) {
         <header className={`mt-8 ${TWO_COLUMN}`}>
           <div className="mx-auto w-full max-w-[220px] md:mx-0 md:max-w-none">
             {book.cover ? (
-              <NotionImage src={book.cover} alt={`Sampul ${book.title}`} className="w-full rounded-lg border border-[var(--ed-border)]" />
+              <NotionImage src={book.cover} alt={`Sampul ${book.title}`} width={500} height={700} sizes="(min-width: 768px) 240px, 220px" preload className="h-auto w-full rounded-lg border border-[var(--ed-border)]" />
             ) : (
               <div className="flex aspect-[5/7] items-center justify-center rounded-lg border border-[var(--ed-border)] bg-[var(--ed-bg-elevated)] p-6">
                 <span className="ed-serif text-center text-xl italic leading-snug text-[var(--ed-text-muted)]">{book.title}</span>

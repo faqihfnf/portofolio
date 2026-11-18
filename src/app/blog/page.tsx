@@ -2,7 +2,9 @@ import { getData } from "@/services/notionServices";
 import BlogListClient from "@/components/sections/blog/BlogListClient";
 import { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+// ISR: halaman disajikan dari cache dan dibuat ulang di latar belakang paling sering tiap 5 menit.
+// Aman karena URL gambar sudah permanen (disalin ke R2), tidak lagi URL Notion yang kedaluwarsa ±1 jam.
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Blog HR, Pengembangan Organisasi, dan Teknologi",

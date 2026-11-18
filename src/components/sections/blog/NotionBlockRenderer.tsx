@@ -232,7 +232,7 @@ function BlockRenderer({ block }: { block: NotionBlock }) {
 
       return (
         <figure className="my-6">
-          <NotionImage src={url} alt={plainTextOf(caption) || "Blog image"} className="w-full rounded-lg object-cover" />
+          <NotionImage src={url} alt={plainTextOf(caption) || "Blog image"} width={1200} height={800} sizes="(min-width: 768px) 640px, 100vw" className="h-auto w-full rounded-lg object-cover" />
           {caption.length > 0 && (
             <figcaption className="text-sm text-slate-500 text-center mt-2">
               <RichTextContent richText={caption} />

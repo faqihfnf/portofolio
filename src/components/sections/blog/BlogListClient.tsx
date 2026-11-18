@@ -166,7 +166,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                   {/* Thumbnail — kanan seperti sebelumnya */}
                   {post.cover && (
                     <div className="flex-shrink-0 sm:h-[120px] sm:w-[180px]">
-                      <NotionImage src={post.cover} alt={post.title} className="h-44 w-full rounded-lg border border-[var(--ed-border)] object-cover sm:h-full" />
+                      <NotionImage src={post.cover} alt={post.title} width={600} height={400} sizes="(min-width: 640px) 180px, 100vw" className="h-44 w-full rounded-lg border border-[var(--ed-border)] object-cover sm:h-full" />
                     </div>
                   )}
 

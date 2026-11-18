@@ -2,9 +2,9 @@ import { Metadata } from "next";
 import BookListClient from "@/components/sections/books/BookListClient";
 import { getBooks } from "@/services/books/bookServices";
 
-// Mengikuti pola blog: render dinamis + cache in-memory 30 menit di service.
-// URL gambar dari Notion kedaluwarsa ±1 jam, jadi halaman tidak di-cache sebagai HTML statis.
-export const dynamic = "force-dynamic";
+// ISR: halaman disajikan dari cache dan dibuat ulang di latar belakang paling sering tiap 5 menit.
+// Aman karena URL gambar sudah permanen (disalin ke R2), tidak lagi URL Notion yang kedaluwarsa ±1 jam.
+export const revalidate = 300;
 
 const description = "Kumpulan ebook gratis karya dan terjemahan Faqih Nur Fahmi dalam format PDF. Masukkan email Anda, dan file dikirim langsung ke inbox.";
 
@@ -32,8 +32,6 @@ export const metadata: Metadata = {
 export default async function BooksPage() {
   const books = await getBooks();
 
-  // Tanpa <Suspense>: halaman ini dinamis, jadi useSearchParams di BookListClient sudah tersedia saat render
-  // server. Suspense justru menunda hidrasi daftar buku sampai setelah bahasa tersimpan dipulihkan,
-  // sehingga teksnya tidak cocok dengan HTML server (hydration mismatch).
+  // Tanpa <Suspense>: BookListClient membaca ?kategori= dari URL browser, bukan useSearchParams
   return <BookListClient books={books} />;
 }
