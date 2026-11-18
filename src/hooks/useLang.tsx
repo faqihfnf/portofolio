@@ -6,7 +6,7 @@ import { saveLang, type LangType } from "@/lib/i18n";
 // Pemulihan bahasa tersimpan dilakukan di I18nProvider.
 const useLang = () => {
   const { i18n } = useTranslation();
-  const lang: LangType = i18n.language === "id" ? "id" : "en";
+  const lang: LangType = i18n.language === "en" ? "en" : "id";
 
   // Screen reader & browser perlu tahu bahasa konten yang sedang tampil
   useEffect(() => {

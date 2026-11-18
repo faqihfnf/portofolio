@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import ContactPageClient from "./ContactPageClient";
 
 export const metadata: Metadata = {
-  title: "Contact Faqih Nur Fahmi",
-  description: "Get in touch with Faqih Nur Fahmi for conversations about HR management, organizational development, digital transformation, and practical technology solutions.",
+  title: "Hubungi Faqih Nur Fahmi",
+  description: "Hubungi Faqih Nur Fahmi untuk berdiskusi seputar manajemen SDM, pengembangan organisasi, transformasi digital, dan solusi teknologi yang praktis.",
   alternates: { canonical: "/contact" },
 };
 

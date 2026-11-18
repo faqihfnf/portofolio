@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-export const alt = "Faqih Nur Fahmi — HR Manager and Software Engineer";
+export const alt = "Faqih Nur Fahmi — HR Manager dan Software Engineer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -26,7 +26,7 @@ export default async function Image() {
         <div style={{ fontSize: 82, fontWeight: 700, color: "#1B1C1E", lineHeight: 1.05, marginTop: 20 }}>Faqih Nur Fahmi</div>
         <div style={{ width: 96, height: 5, backgroundColor: "#8A6F3F", marginTop: 32, marginBottom: 32 }} />
         <div style={{ fontSize: 36, color: "#4A4A46", lineHeight: 1.3 }}>Certified HR Manager (BNSP) & Software Engineer</div>
-        <div style={{ fontSize: 24, color: "#8B897F", marginTop: 18 }}>BNSP Certified HR Manager · 9+ years experience</div>
+        <div style={{ fontSize: 24, color: "#8B897F", marginTop: 18 }}>HR Manager bersertifikasi BNSP · 9+ tahun pengalaman</div>
       </div>
       {/* eslint-disable-next-line @next/next/no-img-element -- ImageResponse (Satori) hanya mendukung <img> */}
       <img src={photoSrc} alt="" width={340} height={340} style={{ borderRadius: "50%", objectFit: "cover", border: "6px solid #D8D6CE" }} />

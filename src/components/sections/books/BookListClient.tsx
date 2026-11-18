@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
+import { useTranslation } from "react-i18next";
 import SectionHeader from "@/components/editorial/SectionHeader";
 import { fraunces, inter } from "@/components/editorial/fonts";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
@@ -12,6 +13,7 @@ import BookCard from "./BookCard";
 const CATEGORY_PARAM = "kategori";
 
 export default function BookListClient({ books }: { books: Book[] }) {
+  const { t } = useTranslation();
   // Filter disimpan di URL (?kategori=agama) supaya bisa dibagikan
   const searchParams = useSearchParams();
   const activeSlug = searchParams.get(CATEGORY_PARAM) ?? "";
@@ -35,26 +37,26 @@ export default function BookListClient({ books }: { books: Book[] }) {
     window.history.replaceState(null, "", query ? `?${query}` : window.location.pathname);
   };
 
-  const tabs = [{ name: "Semua", slug: "", count: books.length }, ...categories];
+  const tabs = [{ name: t("books.all"), slug: "", count: books.length }, ...categories];
 
   return (
-    <div lang="id" className={`${fraunces.variable} ${inter.variable} editorial min-h-screen`}>
+    <div className={`${fraunces.variable} ${inter.variable} editorial min-h-screen`}>
       <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-28 md:px-10 md:pb-28 md:pt-36">
         <AnimateOnScroll animation="fade-up">
           <SectionHeader
-            tag="Buku"
+            tag={t("books.tag")}
             title={
               <>
-                Ebook <span className="ed-accent-em">Gratis</span>
+                {t("books.title")} <span className="ed-accent-em">{t("books.title-emphasis")}</span>
               </>
             }
-            description="Kumpulan terjemahan dan tulisan saya dalam format PDF. Semuanya gratis: masukkan email Anda, dan file dikirim langsung ke inbox."
+            description={t("books.description")}
           />
         </AnimateOnScroll>
 
         {/* Filter kategori — section bar ala koran, senada dengan filter tag di blog */}
         {categories.length > 1 && (
-          <nav aria-label="Filter kategori" className="mb-10 border-y border-[var(--ed-border)]">
+          <nav aria-label={t("books.filter-label")} className="mb-10 border-y border-[var(--ed-border)]">
             <div className="ed-scroll-x flex gap-x-7 md:flex-wrap">
               {tabs.map((tab) => {
                 const isActive = (activeCategory?.slug ?? "") === tab.slug;
@@ -90,8 +92,8 @@ export default function BookListClient({ books }: { books: Book[] }) {
         ) : (
           // Tampilan kosong — belum ada buku Published
           <div className="border-y border-[var(--ed-border)] px-4 py-20 text-center">
-            <p className="ed-serif text-2xl italic tracking-tight text-[var(--ed-text)]">Belum ada buku di rak ini.</p>
-            <p className="mx-auto mt-3 max-w-md leading-relaxed text-[var(--ed-text-secondary)]">Buku pertama sedang disiapkan. Silakan berkunjung kembali dalam waktu dekat.</p>
+            <p className="ed-serif text-2xl italic tracking-tight text-[var(--ed-text)]">{t("books.empty-title")}</p>
+            <p className="mx-auto mt-3 max-w-md leading-relaxed text-[var(--ed-text-secondary)]">{t("books.empty-description")}</p>
           </div>
         )}
       </section>

@@ -17,7 +17,8 @@ i18n
         translation: idJson,
       },
     },
-    lng: "en", // if you're using a language detector, do not define the lng option
+    // Bahasa Indonesia sebagai default: server merender versi Indonesia, jadi itulah yang diindeks Google
+    lng: "id",
     fallbackLng: "en",
 
     interpolation: {

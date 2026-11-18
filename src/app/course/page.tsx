@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import CoursePageClient from "./CoursePageClient";
 
 export const metadata: Metadata = {
-  title: "Courses and Learning",
-  description: "Courses and learning resources covering HR, organizational development, data, automation, and software development.",
+  title: "Kursus dan Pembelajaran",
+  description: "Kursus dan materi belajar seputar HR, pengembangan organisasi, data, otomasi, dan pengembangan software.",
   alternates: { canonical: "/course" },
 };
 

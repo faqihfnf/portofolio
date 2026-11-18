@@ -10,7 +10,7 @@ interface I18nProviderProps {
 const I18nProvider: FC<I18nProviderProps> = ({ children }) => {
   // Pulihkan bahasa terakhir setelah hidrasi. Harus di sini, di komponen paling luar: effect induk
   // berjalan setelah effect semua anaknya, jadi setiap useTranslation sudah mendengarkan event
-  // pergantian bahasa saat changeLanguage dipanggil. Server selalu merender bahasa Inggris.
+  // pergantian bahasa saat changeLanguage dipanggil. Server selalu merender bahasa Indonesia.
   // changeLanguage sengaja dipanggil walau bahasanya sudah sama: di StrictMode effect berjalan dua kali,
   // dan event pertama bisa jatuh saat komponen sedang dilepas sementara, sehingga perlu dikirim ulang.
   useEffect(() => {

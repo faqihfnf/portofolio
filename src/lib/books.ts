@@ -14,17 +14,30 @@ export const getTranslatorName = (book: Book) => book.translator ?? AUTHOR_NAME;
 /** Nama penulis yang ditampilkan; Karya Sendiri tanpa Penulis otomatis memakai nama pemilik situs */
 export const getAuthorName = (book: Book) => book.author ?? (book.type === "original" ? AUTHOR_NAME : null);
 
+/** Label baris penulis per bahasa — default Bahasa Indonesia */
+export interface AuthorLineLabels {
+  by: (name: string) => string;
+  workOf: (author: string) => string;
+  translatedBy: (name: string) => string;
+}
+
+const ID_AUTHOR_LABELS: AuthorLineLabels = {
+  by: (name) => `Oleh ${name}`,
+  workOf: (author) => `Karya ${author}`,
+  translatedBy: (name) => `Diterjemahkan oleh ${name}`,
+};
+
 /**
  * Baris penulis:
  * - Karya Sendiri → "Oleh {Penulis}"
  * - Terjemahan    → "Karya {Penulis} · Diterjemahkan oleh {Penerjemah}"
  */
-export function getAuthorLine(book: Book): string {
+export function getAuthorLine(book: Book, labels: AuthorLineLabels = ID_AUTHOR_LABELS): string {
   if (book.type === "translation") {
-    const translator = `Diterjemahkan oleh ${getTranslatorName(book)}`;
-    return book.author ? `Karya ${book.author} · ${translator}` : translator;
+    const translator = labels.translatedBy(getTranslatorName(book));
+    return book.author ? `${labels.workOf(book.author)} · ${translator}` : translator;
   }
-  return `Oleh ${getAuthorName(book)}`;
+  return labels.by(getAuthorName(book) ?? AUTHOR_NAME);
 }
 
 export const isSamePerson = (name: string | null) => !name || name.trim().toLowerCase() === AUTHOR_NAME.toLowerCase();

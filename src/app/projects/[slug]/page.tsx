@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!project) notFound();
 
-  const description = project.description || `${project.title} — project by Faqih Nur Fahmi`;
+  const description = project.description || `${project.title} — proyek oleh Faqih Nur Fahmi`;
 
   // Gambar OG tidak diisi dari cover Notion (URL-nya kedaluwarsa ±1 jam),
   // jadi tetap memakai opengraph-image bawaan situs

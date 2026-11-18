@@ -25,10 +25,10 @@ export default function ExperienceClient() {
       <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-28 md:px-10 md:pb-28 md:pt-36">
         <AnimateOnScroll animation="fade-up">
           <SectionHeader
-            tag="Experience"
+            tag={t("experience.tag")}
             title={
               <>
-                {t("experience.title").replace(" Saya", "")} <em className="ed-accent-em">&amp; Journey</em>
+                {t("experience.heading")} <em className="ed-accent-em">{t("experience.heading-emphasis")}</em>
               </>
             }
             description={t("experience.description")}

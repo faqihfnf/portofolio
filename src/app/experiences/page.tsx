@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import ExperienceClient from "@/components/sections/experiences/ExperienceClient";
 
 export const metadata: Metadata = {
-  title: "HR Manager Experience",
-  description: "Explore Faqih Nur Fahmi's professional experience as an HR Manager across people management, organizational development, HR strategy, and digital transformation.",
+  title: "Pengalaman HR Manager & Software Engineer",
+  description: "Pengalaman profesional Faqih Nur Fahmi sebagai HR Manager di bidang manajemen SDM, pengembangan organisasi, strategi HR, dan transformasi digital.",
   alternates: { canonical: "/experiences" },
 };
 

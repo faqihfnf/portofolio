@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { Metadata } from "next";
 import BookListClient from "@/components/sections/books/BookListClient";
 import { getBooks } from "@/services/books/bookServices";
@@ -21,7 +20,7 @@ export const metadata: Metadata = {
     title: "Buku dan Ebook Gratis — Faqih Nur Fahmi",
     description,
     // openGraph di sini menimpa milik root, jadi gambar dari src/app/opengraph-image.tsx harus disebut ulang
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Faqih Nur Fahmi — HR Manager and Software Engineer" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Faqih Nur Fahmi — HR Manager dan Software Engineer" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -33,10 +32,8 @@ export const metadata: Metadata = {
 export default async function BooksPage() {
   const books = await getBooks();
 
-  return (
-    // BookListClient membaca ?kategori= lewat useSearchParams
-    <Suspense>
-      <BookListClient books={books} />
-    </Suspense>
-  );
+  // Tanpa <Suspense>: halaman ini dinamis, jadi useSearchParams di BookListClient sudah tersedia saat render
+  // server. Suspense justru menunda hidrasi daftar buku sampai setelah bahasa tersimpan dipulihkan,
+  // sehingga teksnya tidak cocok dengan HTML server (hydration mismatch).
+  return <BookListClient books={books} />;
 }

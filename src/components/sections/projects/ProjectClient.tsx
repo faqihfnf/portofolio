@@ -26,7 +26,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
     <div className={`${fraunces.variable} ${inter.variable} editorial min-h-screen`}>
       <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-28 md:px-10 md:pb-28 md:pt-36">
         <AnimateOnScroll animation="fade-up">
-          <SectionHeader tag="Projects" title={t("projects.title")} description={t("projects.description")} />
+          <SectionHeader tag={t("projects.tag")} title={t("projects.title")} description={t("projects.description")} />
         </AnimateOnScroll>
 
         {/* Daftar proyek — baris tipis konsisten dengan NumberedList */}

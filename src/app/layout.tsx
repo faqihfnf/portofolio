@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     default: "Faqih Nur Fahmi — Certified HR Manager (BNSP) & Software Engineer",
     template: "%s | Faqih Nur Fahmi",
   },
-  description: "Faqih Nur Fahmi is an HR Manager and BNSP Certified HR Manager with 9+ years of experience in people management, organizational development, and practical digital solutions.",
+  description: "Faqih Nur Fahmi adalah HR Manager bersertifikasi BNSP dengan pengalaman lebih dari 9 tahun di bidang manajemen SDM, pengembangan organisasi, dan solusi digital yang praktis.",
   authors: [{ name: "Faqih Nur Fahmi", url: "https://faqih.id" }],
   creator: "Faqih Nur Fahmi",
   robots: {
@@ -34,15 +34,15 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "id_ID",
     siteName: "Faqih Nur Fahmi",
     title: "Faqih Nur Fahmi — Certified HR Manager (BNSP) & Software Engineer",
-    description: "HR Manager and BNSP Certified HR Manager combining people, organizational processes, and technology.",
+    description: "HR Manager bersertifikasi BNSP yang menghubungkan manusia, proses organisasi, dan teknologi.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Faqih Nur Fahmi — Certified HR Manager (BNSP) & Software Engineer",
-    description: "HR Manager and BNSP Certified HR Manager combining people, organizational processes, and technology.",
+    description: "HR Manager bersertifikasi BNSP yang menghubungkan manusia, proses organisasi, dan teknologi.",
   },
   icons: {
     icon: "/favicon.ico",
@@ -60,7 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     "@id": PERSON_ID,
     name: "Faqih Nur Fahmi",
     jobTitle: "HR Manager & Software Engineer",
-    description: "HR Manager and BNSP Certified HR Manager with software engineering skills.",
+    description: "HR Manager bersertifikasi BNSP dengan kemampuan software engineering.",
     url: "https://faqih.id",
     image: "https://faqih.id/profil.png",
     sameAs: ["https://github.com/faqihfnf", "https://www.linkedin.com/in/faqihnurfahmi/", "https://www.instagram.com/faqih.me", "https://www.youtube.com/@marifahid"],
@@ -82,7 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     "@id": WAWANCARAI_ID,
     name: "Wawancarai",
     url: "https://wawancarai.com",
-    description: "A SaaS that helps Indonesian job seekers prepare their applications: CV and job matching, honest CV rewriting, and voice interview practice.",
+    description: "Membantu pencari kerja Indonesia menyiapkan lamaran: cek kecocokan CV dengan lowongan, perbaiki CV dengan jujur, dan latihan wawancara dengan suara.",
     founder: { "@id": PERSON_ID },
   };
 
@@ -92,7 +92,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html lang="id" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={`${inter.className} ${poppins.className}`}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
         <I18nProvider>

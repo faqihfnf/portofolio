@@ -9,11 +9,12 @@ import { EditorialButton } from "@/components/editorial/EditorialButton";
 import EditorialDialog from "@/components/editorial/EditorialDialog";
 import { useTranslation } from "react-i18next";
 
+// Pesan error berupa key terjemahan, diterjemahkan saat ditampilkan supaya ikut bahasa yang dipilih
 const contactSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  subject: z.string().min(5, "Subject must be at least 5 characters"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  name: z.string().min(2, "contact.errors.name-min"),
+  email: z.string().email("contact.errors.email-invalid"),
+  subject: z.string().min(5, "contact.errors.subject-min"),
+  message: z.string().min(10, "contact.errors.message-min"),
 });
 type ContactFormData = z.infer<typeof contactSchema>;
 
@@ -46,6 +47,7 @@ export function ContactForm() {
   const [isSending, setIsSending] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [senderName, setSenderName] = useState("");
+  const [sendError, setSendError] = useState(false);
   const {
     register,
     handleSubmit,
@@ -59,6 +61,7 @@ export function ContactForm() {
 
   const onSubmit = async (data: ContactFormData) => {
     setIsSending(true);
+    setSendError(false);
     try {
       await emailjs.send(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
@@ -77,7 +80,7 @@ export function ContactForm() {
     } catch (err) {
       const detail = (err as { text?: string })?.text ?? (err as Error)?.message ?? "Unknown error";
       console.error("EmailJS error:", detail, err);
-      alert(`Failed to send message (${detail}). Please try again or email me directly.`);
+      setSendError(true);
     } finally {
       setIsSending(false);
     }
@@ -85,28 +88,35 @@ export function ContactForm() {
 
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-      <h2 className="ed-serif text-2xl tracking-tight">Send Message</h2>
+      <h2 className="ed-serif text-2xl tracking-tight">{t("contact.form-title")}</h2>
       <form className="mt-8 space-y-8" onSubmit={handleSubmit(onSubmit)} noValidate>
         {/* Name */}
-        <Field id="name" label="Name" error={errors.name?.message}>
-          <input id="name" autoComplete="name" {...register("name")} {...errorProps("name", errors.name?.message)} className={underlineInput} placeholder="Your name" />
+        <Field id="name" label={t("contact.name")} error={errors.name?.message && t(errors.name.message)}>
+          <input id="name" autoComplete="name" {...register("name")} {...errorProps("name", errors.name?.message)} className={underlineInput} placeholder={t("contact.name-placeholder")} />
         </Field>
         {/* Email */}
-        <Field id="email" label="Email" error={errors.email?.message}>
-          <input id="email" type="email" autoComplete="email" {...register("email")} {...errorProps("email", errors.email?.message)} className={underlineInput} placeholder="your.email@example.com" />
+        <Field id="email" label={t("contact.email")} error={errors.email?.message && t(errors.email.message)}>
+          <input id="email" type="email" autoComplete="email" {...register("email")} {...errorProps("email", errors.email?.message)} className={underlineInput} placeholder={t("contact.email-placeholder")} />
         </Field>
         {/* Subject */}
-        <Field id="subject" label="Subject" error={errors.subject?.message}>
-          <input id="subject" {...register("subject")} {...errorProps("subject", errors.subject?.message)} className={underlineInput} placeholder="What's this about?" />
+        <Field id="subject" label={t("contact.subject")} error={errors.subject?.message && t(errors.subject.message)}>
+          <input id="subject" {...register("subject")} {...errorProps("subject", errors.subject?.message)} className={underlineInput} placeholder={t("contact.subject-placeholder")} />
         </Field>
         {/* Message */}
-        <Field id="message" label="Message" error={errors.message?.message}>
-          <textarea id="message" rows={5} {...register("message")} {...errorProps("message", errors.message?.message)} className={`${underlineInput} resize-none`} placeholder="Your message..." />
+        <Field id="message" label={t("contact.message")} error={errors.message?.message && t(errors.message.message)}>
+          <textarea id="message" rows={5} {...register("message")} {...errorProps("message", errors.message?.message)} className={`${underlineInput} resize-none`} placeholder={t("contact.message-placeholder")} />
         </Field>
+
+        {/* Pesan gagal kirim — sebelumnya memakai alert() berbahasa Inggris */}
+        {sendError && (
+          <p role="alert" className="text-sm text-[var(--ed-accent)]">
+            {t("contact.send-error")}
+          </p>
+        )}
 
         {/* Submit — button dengan border tipis */}
         <EditorialButton type="submit" disabled={isSending} variant="primary">
-          {isSending ? "Sending..." : "Send Message"}
+          {isSending ? t("contact.sending") : t("contact.send")}
         </EditorialButton>
       </form>
 

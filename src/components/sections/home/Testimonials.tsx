@@ -60,7 +60,7 @@ export default function Testimonials() {
       <div className="mx-auto w-full max-w-5xl px-6 py-14 md:px-10 md:py-24">
         <AnimateOnScroll animation="fade-up">
           <SectionHeader
-            tag="Testimonials"
+            tag={t("testimonials.tag")}
             title={
               <>
                 {t("testimonials.title")}

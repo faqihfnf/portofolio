@@ -161,7 +161,23 @@
     "button": "Get in touch"
   },
 
+  "books": {
+    "tag": "Books",
+    "title": "Free",
+    "title-emphasis": "Ebooks",
+    "description": "A collection of my translations and writings in PDF.",
+    "filter-label": "Filter by category",
+    "all": "All",
+    "empty-title": "No books on this shelf yet.",
+    "empty-description": "The first book is being prepared. Please check back soon.",
+    "by": "By {{name}}",
+    "work-of": "By {{author}}",
+    "translated-by": "Translated by {{name}}"
+  },
   "experience": {
+    "tag": "Experience",
+    "heading": "My Experience",
+    "heading-emphasis": "& Journey",
     "title": "My Experience",
     "description": "My professional journey in HR and software engineering.",
     "hr": {
@@ -182,12 +198,14 @@
   },
 
   "projects": {
+    "tag": "Projects",
     "title": "My Projects",
     "description": "Here are some of the projects I've worked on.",
     "detail": "Detail"
   },
 
   "certificates": {
+    "tag": "Certificates",
     "title": "My Certificates",
     "description": "A collection of achievements and courses I have completed.",
     "view": "View Certificate",
@@ -205,10 +223,33 @@
   },
 
   "contact": {
+    "tag": "Contact",
     "title": "Get in Touch",
     "description": "Have a project, a speaking invitation, or a career opportunity in mind? Send me a message and I'll get back to you within 24 hours.",
     "success-title": "Your message is on its way!",
     "success-body": "Thank you for taking the time to write. I'm really glad we got connected — I'll get back to you soon, usually within 24 hours. Talk to you soon!",
-    "success-close": "Back"
+    "success-close": "Back",
+    "form-title": "Send Message",
+    "name": "Name",
+    "name-placeholder": "Your name",
+    "email": "Email",
+    "email-placeholder": "your.email@example.com",
+    "subject": "Subject",
+    "subject-placeholder": "What's this about?",
+    "message": "Message",
+    "message-placeholder": "Your message...",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "send-error": "Your message couldn't be sent. Please try again, or email me directly at faqih.fnf@gmail.com.",
+    "errors": {
+      "name-min": "Name must be at least 2 characters",
+      "email-invalid": "Invalid email address",
+      "subject-min": "Subject must be at least 5 characters",
+      "message-min": "Message must be at least 10 characters"
+    },
+    "info-title": "Contact Info",
+    "phone": "Phone",
+    "location": "Location",
+    "follow-title": "Follow Me"
   }
 }

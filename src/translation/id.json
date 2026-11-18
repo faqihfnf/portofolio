@@ -160,7 +160,23 @@
     },
     "button": "Hubungi saya"
   },
+  "books": {
+    "tag": "Buku",
+    "title": "Ebook",
+    "title-emphasis": "Gratis",
+    "description": "Kumpulan terjemahan dan tulisan saya dalam format PDF.",
+    "filter-label": "Filter kategori",
+    "all": "Semua",
+    "empty-title": "Belum ada buku di rak ini.",
+    "empty-description": "Buku pertama sedang disiapkan. Silakan berkunjung kembali dalam waktu dekat.",
+    "by": "Oleh {{name}}",
+    "work-of": "Karya {{author}}",
+    "translated-by": "Diterjemahkan oleh {{name}}"
+  },
   "experience": {
+    "tag": "Pengalaman",
+    "heading": "Pengalaman",
+    "heading-emphasis": "& Perjalanan",
     "title": "Pengalaman Saya",
     "description": "Perjalanan profesional saya dalam bidang HR dan software engineering.",
     "hr": {
@@ -181,12 +197,14 @@
   },
 
   "projects": {
+    "tag": "Proyek",
     "title": "Proyek Saya",
     "description": "Berikut adalah beberapa proyek yang telah saya kerjakan.",
     "detail": "Detail"
   },
 
   "certificates": {
+    "tag": "Sertifikat",
     "title": "Sertifikat Saya",
     "description": "Kumpulan pencapaian dan kursus yang telah saya selesaikan.",
     "view": "Lihat Sertifikat",
@@ -204,10 +222,33 @@
   },
 
   "contact": {
+    "tag": "Kontak",
     "title": "Hubungi Saya",
     "description": "Punya proyek, undangan sebagai pembicara, atau peluang karier? Kirim pesan dan saya akan membalas dalam 24 jam.",
-    "success-title": "Pesanmu sudah terkirim!",
-    "success-body": "Terima kasih sudah meluangkan waktu menulis. Senang sekali bisa terhubung denganmu — aku akan segera membalas pesanmu, biasanya dalam 1×24 jam. Sampai jumpa lagi di sana!",
-    "success-close": "Kembali"
+    "success-title": "Pesan Anda sudah terkirim!",
+    "success-body": "Terima kasih sudah meluangkan waktu untuk menulis. Senang sekali bisa terhubung dengan Anda — saya akan segera membalas pesan Anda, biasanya dalam 1×24 jam. Sampai jumpa!",
+    "success-close": "Kembali",
+    "form-title": "Kirim Pesan",
+    "name": "Nama",
+    "name-placeholder": "Nama Anda",
+    "email": "Email",
+    "email-placeholder": "email.anda@contoh.com",
+    "subject": "Subjek",
+    "subject-placeholder": "Tentang apa pesan ini?",
+    "message": "Pesan",
+    "message-placeholder": "Tulis pesan Anda...",
+    "send": "Kirim Pesan",
+    "sending": "Mengirim...",
+    "send-error": "Pesan gagal dikirim. Silakan coba lagi, atau kirim email langsung ke faqih.fnf@gmail.com.",
+    "errors": {
+      "name-min": "Nama minimal 2 karakter",
+      "email-invalid": "Format email belum benar",
+      "subject-min": "Subjek minimal 5 karakter",
+      "message-min": "Pesan minimal 10 karakter"
+    },
+    "info-title": "Info Kontak",
+    "phone": "Telepon",
+    "location": "Lokasi",
+    "follow-title": "Ikuti Saya"
   }
 }

@@ -70,7 +70,7 @@ export default function CertificatesClient() {
     <div className={`${fraunces.variable} ${inter.variable} editorial min-h-screen`}>
       <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-28 md:px-10 md:pb-28 md:pt-36">
         <AnimateOnScroll animation="fade-up">
-          <SectionHeader tag="Certificates" title={t("certificates.title")} description={t("certificates.description")} />
+          <SectionHeader tag={t("certificates.tag")} title={t("certificates.title")} description={t("certificates.description")} />
         </AnimateOnScroll>
 
         {/* Daftar bernomor — baris tipis, bukan grid kartu */}

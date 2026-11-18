@@ -5,8 +5,8 @@ import { Metadata } from "next";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "HR Technology and Digital Projects",
-  description: "Explore digital products, internal tools, and practical technology solutions built to solve organizational and business challenges.",
+  title: "Proyek Teknologi HR dan Digital",
+  description: "Produk digital, tools internal, dan solusi teknologi praktis yang dibangun untuk menjawab tantangan organisasi dan bisnis.",
   alternates: { canonical: "/projects" },
 };
 

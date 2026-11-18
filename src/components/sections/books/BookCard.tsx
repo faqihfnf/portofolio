@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { getAuthorLine } from "@/lib/books";
 import type { Book } from "@/services/books/types";
 import NotionImage from "@/components/ui/NotionImage";
@@ -10,6 +13,13 @@ interface BookCardProps {
 }
 
 export default function BookCard({ book, headingAs: Heading = "h2" }: BookCardProps) {
+  const { t } = useTranslation();
+  const authorLine = getAuthorLine(book, {
+    by: (name) => t("books.by", { name }),
+    workOf: (author) => t("books.work-of", { author }),
+    translatedBy: (name) => t("books.translated-by", { name }),
+  });
+
   return (
     <Link href={`/books/${book.slug}`} data-no-justify className="group flex flex-col">
       <div className="aspect-[5/7] overflow-hidden rounded-lg border border-[var(--ed-border)] bg-[var(--ed-bg-elevated)]">
@@ -27,7 +37,7 @@ export default function BookCard({ book, headingAs: Heading = "h2" }: BookCardPr
 
       <Heading className={`ed-serif text-lg leading-snug tracking-tight transition-colors group-hover:text-[var(--ed-accent)] ${book.category ? "mt-1.5" : "mt-4"}`}>{book.title}</Heading>
 
-      <p className="mt-1.5 text-[13px] leading-relaxed text-[var(--ed-text-secondary)]">{getAuthorLine(book)}</p>
+      <p className="mt-1.5 text-[13px] leading-relaxed text-[var(--ed-text-secondary)]">{authorLine}</p>
     </Link>
   );
 }

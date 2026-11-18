@@ -15,7 +15,7 @@ export default function ContactPageClient() {
     <div className={`${fraunces.variable} ${inter.variable} editorial min-h-screen`}>
       <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-28 md:px-10 md:pb-28 md:pt-36">
         <AnimateOnScroll animation="fade-up">
-          <SectionHeader tag="Contact" title={t("contact.title")} description={t("contact.description")} />
+          <SectionHeader tag={t("contact.tag")} title={t("contact.title")} description={t("contact.description")} />
         </AnimateOnScroll>
 
         <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_300px] lg:gap-16">
